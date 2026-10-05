@@ -8,11 +8,32 @@ The application is designed to provide a simple graphical interface for viewing 
 OpenSky is currently under active development. The core weather display functionality is available, while additional features are planned for future releases.
 
 ## Acknowledgements
+
 - @BroCodez on YouTube for providing the 12 hour Python tutorial that included the Weather API Project that started it all.
 - OpenWeatherMap for providing the real-time weather data that this application is based on
 - PyQt5 for the graphical user interface framework
 - The Python community for useful libraries and documentation
 - My Twitch community that watched me learn Python and stayed for the development of this project!
+
+## Contributing
+
+Suggestions, bug reports, and contributions are welcome!
+
+1. Fork the repository
+2. Create a feature branch
+```bash
+git checkout -b feature/your-feature-name
+```
+3. Commit your changes
+```bash
+git commit -m "Add your feature description"
+``*
+```
+4. Push the branch*
+```bash
+git push origin feature/your-feature-name
+```
+5. Open a pull request*
 
 ## Features
 
