@@ -155,3 +155,12 @@ Run the application with:
 ```bash
 python main.py
 ```
+
+## License
+## License
+
+OpenSky is licensed under the GNU General Public License v3.0.
+
+See the [LICENSE](LICENSE) file for the complete license text.
+
+This project uses PyQt5, which is available under the GNU GPL or a commercial license. OpenSky is distributed as an open-source GPL-licensed application.
