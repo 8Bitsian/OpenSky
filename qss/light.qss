@@ -1,0 +1,116 @@
+/* Font family (Barlow Semi Condensed) downloaded from https://fonts.google.com.com/ */
+/* Color pallete generated from https://coolors.co/
+   Brick Ember: #B80C09
+   Yale Blue:   #0B4F6C
+   Bright Sky:  #01BAEF
+   Ghost White: #FBFBFF
+   Ink Black:   #040F16 */
+
+/* Application */
+
+QMainWindow, QWidget {
+    background-color: qlineargradient(
+        x1: 0, y1: 0,
+        x2: 1, y2: 1,
+        stop: 0 {{GHOST_WHITE}},
+        stop: 1 {{BRIGHT_SKY}}
+    );
+    color: {{INK_BLACK}};
+    font-family: Barlow Semi Condensed;
+}
+
+/* Labels */
+
+QLabel {
+    background-color: transparent;
+    color: {{YALE_BLUE}};
+    letter-spacing: 3px;
+}
+
+QLabel#title {
+    font-size: 28px;
+    font-weight: bold;
+}
+
+QLabel#temperature {
+    font-size: 112px;
+    font-weight: bold;
+}
+
+QLabel#caption {
+    font-size: 28px;
+    font-weight: bold;
+}
+
+/* Textbox Widget */
+
+QLineEdit {
+    background-color: {{GHOST_WHITE}};
+    color: {{YALE_BLUE}};
+    font-size: 24px;
+    padding: 8px 12px;
+    border: 2px solid {{BRIGHT_SKY}};
+    border-radius: 7px;
+}
+
+/* Submit Button */
+
+QPushButton, QRadioButton {
+    background-color: transparent;
+    color: {{YALE_BLUE}};
+    font-size: 14px;
+    font-weight: bold;
+    letter-spacing: 3px;
+}
+
+QPushButton {
+    padding: 8px 10px;
+    border: 2px solid {{BRIGHT_SKY}};
+    border-radius: 7px;
+}
+
+QPushButton:hover {
+    background-color: {{YALE_BLUE}};
+    color: {{GHOST_WHITE}};
+}
+
+/* Radio Temperature Buttons */
+
+QRadioButton {
+    padding: 8px 10px;
+    spacing: 8px;
+}
+
+QRadioButton:hover {
+    background-color: {{YALE_BLUE}};
+    color: {{GHOST_WHITE}};
+    border-radius: 8px;
+}
+
+QRadioButton::indicator {
+    width: 18px;
+    height: 18px;
+    border-radius: 9px;
+}
+
+QRadioButton::indicator:unchecked {
+    background-color: {{GHOST_WHITE}};
+    border: 2px solid {{BRIGHT_SKY}};
+}
+
+QRadioButton::indicator:unchecked:hover {
+    background-color: {{BRIGHT_SKY}};
+    border: 2px solid {{GHOST_WHITE}};
+}
+
+QRadioButton::indicator:checked {
+    background-color: {{YALE_BLUE}};
+    border: 2px solid {{BRIGHT_SKY}};
+}
+
+/* Image Icons */
+
+QSvgWidget {
+    background-color: transparent;
+    border-raidus: 2px;
+}
