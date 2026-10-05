@@ -1,8 +1,11 @@
 # OpenSky
-OpenSky is a desktop weather application built with Python and PyQt5.
-It uses the [OpenWeatherMap API](https://openweathermap.org/api) to retrieve and display current weather information for a city selected by the end user.
+OpenSky is a desktop weather application built with Python and PyQt5. It uses the [OpenWeatherMap API](https://openweathermap.org/api) to retrieve and display current weather information for a city selected by the end user.
 
-The application is designed to provide a simple GUI for viewing weather conditions, temperature, and other relevant data. 
+The application is designed to provide a simple graphical interface for viewing weather conditions, temperature, and other relevant data.
+
+## Project Status
+
+OpenSky is currently under active development. The core weather display functionality is available, while additional features are planned for future releases.
 
 ## Acknowledgements
 - @BroCodez on YouTube for providing the 12 hour Python tutorial that included the Weather API Project that started it all.
@@ -15,29 +18,33 @@ The application is designed to provide a simple GUI for viewing weather conditio
 
 ### Current Features
 
-- Simple graphical user interface built with PyQt5
+- Desktop graphical user interface built with PyQt5
 - Display the current temperature
 - Convert temperature between Celsius and Fahrenheit
-- Display current weather condition via icon and caption
-- Display current city
+- Display the current weather condition
+- Display a weather icon and condition caption
+- Display the current city
+- Retrieve weather data through the OpenWeatherMap API
 
 ### Planned Features
 
-- Prompt end users to enter their OpenWeatherMap API key via pop up window
-- Store API key so it remains available after the application closes
-  - Store the API key securely via an encryption algorithm built-into the app
+- Prompt users to enter their OpenWeatherMap API key through a dialog window
+- Store the API key for use in future sessions
+- Store API credentials using secure operating-system credential storage
 - Display additional weather information, including:
   - Wind speed and direction
   - Humidity
   - Air quality
-  - Feel-like temperature
+  - Feels-like temperature
   - Atmospheric pressure
   - Visibility
   - Sunrise and sunset times
-- Save multiple cities data
-- Display multiplies cities current weather conditions
-- Add real-time weather updates
-- Add forecast for next week
+- Save multiple cities
+- Display current weather conditions for saved cities
+- Automatically refresh weather data at regular intervals
+- Display a multi-day weather forecast
+- Add improved loading indicators and error messages
+- Add customizable application settings
 
 ## Preview
 
@@ -51,44 +58,79 @@ A preview image or animated GIF can be added here:
 
 - Python
 - PyQt5
+- QSS
 - OpenWeatherMap API
+- Requests
 - JSON
-- HTTP requests
+- HTTP
 
 ## Requirements
 
-- Python 3.8+
+- Python 3.8 or newer
 - An OpenWeatherMap API key
-- Internet connection
+- An active internet connection
 
-### OpenWeatherMap API Key Setup
+### Known Limitations
+
+- An internet connection is required to retrieve weather data
+- A valid OpenWeatherMap API key is required*
+- Weather data depends on the availability and accuracy of the OpenWeatherMap service
+- API request limits may apply depending on the selected OpenWeatherMap plan*
+
+## Installation
+
+1. Clone the repository:
+```bash
+git clone https://github.com/YOUR\_USERNAME/OpenSky.git
+```
+2. Navigate to the project directory:
+```bash
+cd OpenSky
+```
+3. Create the virtual environment:
+```bash
+python -m venv venv
+```
+5. Activate the virtual environment
+   - For Windows end users:
+   ```bash
+   venv\Scripts\activate
+   ```
+   - For Linux or macOS end users:
+   ```bash
+   source venv/bin/activate
+   ```
+6. Install the required dependencies:
+```bash
+pip install -r requirements.txt
+```
+
+## OpenWeatherMap API Key Setup
 
 OpenSky requires an API Key from OpenWeatherMap to retrieve weather data
 
 1. Create an account on [OpenWeatherMap API](https://openweathermap.org/api)
 2. Generate an API key from your account dashboard
-3. Start OpenSky
-4. Enter the API key when prompted by the application
+3. Configure the key according to the application's setup instructions
+4. Start OpenSky
 
-The planned version of OpenSky will allow users to enter their API key through a pop-up window and save it for future sessions.
-The key should be stored using an operating-system-appropriate secure storage mechanism where possible.
-
-## Security Notes
-
-**DO NOT COMMIT YOUR PERSONAL API KEY TO GITHUB OR PLACE IN THE SOURCE CODE!**
-
-API keys are sensitive credentials. Never commit them to the repository.
-Before publishing the project, make sure that:
-- API keys are excluded from Git with `.gitignore`
-- Example configuration files contain placeholder values only
-- API keys are not printed in error messages
-- Existing exposed keys are revoked and regenerated
-- Saved keys are protected as securely as possible for the target operating system
-
-For development purposes, you may temporarily use an environment variable:
+For development, the API key may be provided through an environment variable:
 ```bash
 OPENWEATHER\_API\_KEY=your\_api\_key\_here
 ```
 
-## License
-This project is licensed under the _ Licenses. See the `LICENSE` file for more information.
+On Windows Powershell:
+```powershell
+\$env:OPENWEATHER\_API\_KEY = "your\_api\_key\_here"
+```
+
+The planned version of OpenSky will allow users to enter their API key through an in-app dialog and save it for future sessions.
+
+Where possible, API keys should be stored using the operating system's secure credential manager. The application should not implement custom encryption for sensitive credentials.
+
+## Running the Application
+
+Run the application with:
+```bash
+python main.py
+```
