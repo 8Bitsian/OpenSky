@@ -1,5 +1,5 @@
 # Third party imports
-from PyQt6.QtWidgets import QPushButton, QRadioButton, QButtonGroup
+from PyQt6.QtWidgets import QButtonGroup, QPushButton, QRadioButton
 
 def create_button(parent, object_name, on_click=None, text=""):
     """Create a button object w/specific parameters"""

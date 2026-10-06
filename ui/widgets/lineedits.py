@@ -11,7 +11,7 @@ def create_textbox(parent, object_name, text="", password=False):
     textbox.setPlaceholderText(text)
 
     if password:
-        textbox.setEchoMode(QLineEdit.password)
+        textbox.setEchoMode(QLineEdit.EchoMode.Password)
 
     return textbox
 
@@ -21,4 +21,4 @@ def create_city_input(parent):
 
 def create_api_key_input(parent):
     """Create the app title label for the program."""
-    return create_textbox(parent, "api_key", "Enter OpenWeather API Key")
+    return create_textbox(parent, "api_key_input", "Enter OpenWeather API Key", password=True)

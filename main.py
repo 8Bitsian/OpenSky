@@ -6,7 +6,7 @@ from PyQt6.QtWidgets import QApplication
 
 # Local library imports
 from ui.app_theme import load_fonts, load_stylesheet
-from ui.widgets.main_window import Main_Window
+from ui.windows.main_window import Main_Window
 
 def main():
     """main() method runs the main program."""

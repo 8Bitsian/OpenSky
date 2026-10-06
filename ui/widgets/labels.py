@@ -28,11 +28,11 @@ def create_description(parent):
 
 def create_feel_temp(parent):
     """Create what the temperature feels like label for current day."""
-    return create_label(parent, "feel_label", "--")
+    return create_label(parent, "feel_label", "Feels like: --")
 
 def create_forecast_temp(parent):
     """Create the high temperature label for current day."""
-    return create_label(parent, "high_label", "--")
+    return create_label(parent, "forecast_label", "--")
 
 def create_forecast_month(parent):
     """Create a day of the month (1-31) label for the forecast."""
@@ -44,12 +44,4 @@ def create_forecast_week(parent):
 
 def create_humidity(parent):
     """Create the low temperature label for current day."""
-    return create_label(parent, "humid_label", "--")
-
-def create_sunrise(parent):
-    """Create the low temperature label for current day."""
-    return create_label(parent, "air_label", "--")
-
-def create_sunset(parent):
-    """Create the low temperature label for current day."""
-    return create_label(parent, "pollen_label", "--")
+    return create_label(parent, "humid_label", "Humidity: --")

@@ -7,3 +7,32 @@
 7. `weather_api_data.py` hold weather data structures, parsing, or constants
 8. `resources` holds images and other files the app displays or uses
 9. `qss` holds the stylesheet
+
+
+|-- data / weather_api_data.py
+|-- qss / styles.qss
+|-- resources /
+    |- fonts /
+    |- icons /
+       - settings.svg
+       - circle.svg
+       - drizzle.svg
+    |- images /
+    |- sounds /
+|-- services / weather_service.py
+|-- tests /
+|-- ui /
+    - app_theme.py
+    |- controllers /
+       - main_controller.py
+    |- dialogs /
+       - settings_dialog.py
+    |- widgets /
+       - buttons.py
+       - images.py
+       - labels.py
+       - layouts.py
+       - lineedits.py
+    |- windows /
+       - main_window.py
+main.py
