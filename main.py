@@ -3,9 +3,9 @@ import sys
 from pathlib import Path
 
 # Third-party limports
-from PyQt5.QtWidgets import QApplication
-from PyQt5.QtCore import QFile, QTextStream
-from PyQt5.QtGui import QFontDatabase
+from PyQt6.QtWidgets import QApplication
+from PyQt6.QtCore import QFile, QTextStream
+from PyQt6.QtGui import QFontDatabase
 
 # Local library imports
 from ui.main_window import Main_Window
@@ -17,7 +17,7 @@ def main():
     window = Main_Window()
     window.show()
 
-    sys.exit(app.exec_())
+    sys.exit(app.exec())
 
 if __name__ == "__main__":
     print(f"Running {__name__}\n")

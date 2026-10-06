@@ -3,8 +3,8 @@ import sys, os
 from pathlib import Path
 
 # Third-party limports
-from PyQt5.QtWidgets import QMainWindow, QWidget
-from PyQt5.QtCore import Qt
+from PyQt6.QtWidgets import QMainWindow, QWidget
+from PyQt6.QtCore import Qt
 
 # Local library imports
 from ui.images import load_icon

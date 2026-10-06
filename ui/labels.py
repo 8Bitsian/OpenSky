@@ -1,5 +1,5 @@
 # Third party imports
-from PyQt5.QtWidgets import QLabel
+from PyQt6.QtWidgets import QLabel
 
 def create_label(parent, object_name, text=""):
     """Create the label widget object w/specified paramters"""

@@ -2,9 +2,9 @@
 from pathlib import Path
 
 # Third party imports
-from PyQt5.QtGui import QIcon
-from PyQt5.QtCore import QSize
-from PyQt5.QtSvg import QSvgWidget
+from PyQt6.QtGui import QIcon
+from PyQt6.QtCore import QSize
+from PyQt6.QtSvgWidgets import QSvgWidget
 
 # Global variables
 PROJECT_DIR = Path(__file__).resolve().parent.parent
@@ -15,7 +15,7 @@ def get_icon_path(filename):
     return ICON_DIR / filename
 
 def load_icon(filename):
-    """Load an SVG file."""
+    """Load an SVG file into as an icon."""
     icon_path = get_icon_path(filename)
     icon = QIcon(str(icon_path))
 
