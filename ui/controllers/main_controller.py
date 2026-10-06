@@ -51,6 +51,12 @@ def on_submit_click(self):
     finally:
         self.submit.setEnabled(True)
 
+def on_mode_switch(self):
+    pass
+
+def on_dialog_click(self):
+    pass
+
 def on_unit_changed(self, button_id):
     self.units = "imperial" if button_id == 1 else "metric"
     if self.last_weather_data is None:
@@ -108,3 +114,8 @@ def update_picture(picture, filename, theme="light"):
         return False
 
     return True
+
+def set_forecast_icons(self, filenames):
+    """Update the five forecast icons from a list of SVG filenames."""
+    for image, filename in zip(self.forecast_weather_images, filenames):
+        image.load(str(get_icon_path(filename)))

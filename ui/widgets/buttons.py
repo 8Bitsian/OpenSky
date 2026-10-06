@@ -27,6 +27,14 @@ def create_city_submit(parent, on_submit_click):
     """Create the city input submit button to enter the city name."""
     return create_button(parent, "submit_button", on_submit_click, "Submit")
 
+def create_mode_switch(parent, on_mode_switch):
+    """Create the city input submit button to enter the city name."""
+    return create_button(parent, "mode_button", on_mode_switch)
+
+def create_settings_button(parent, on_dialog_click):
+    """Create the city input submit button to enter the city name."""
+    return create_button(parent, "settings_button", on_dialog_click)
+
 def create_temp_unit_preference(parent, on_unit_change):
     """
     Create the temperature-unit radio button.
