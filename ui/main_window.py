@@ -7,8 +7,9 @@ from PyQt5.QtWidgets import QMainWindow, QWidget
 from PyQt5.QtCore import Qt
 
 # Local library imports
-from ui.layouts import create_main_layout
+from ui.images import load_icon
 from ui.labels import create_app_title
+from ui.layouts import create_main_layout
 
 # Ex. from ui.window import Main_Window
 class Main_Window(QMainWindow):
@@ -19,6 +20,7 @@ class Main_Window(QMainWindow):
         self.setWindowTitle("OpenSky")
         self.setMinimumSize(400, 600)
         # Image sourced from https://feathericons.com/
+        self.setWindowIcon(load_icon("drizzle.svg"))
 
         # Create a generic widget for the layout manager
         central_widget = QWidget(self)
