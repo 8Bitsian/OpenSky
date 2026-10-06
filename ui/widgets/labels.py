@@ -37,3 +37,15 @@ def create_high_temp(parent):
 def create_low_temp(parent):
     """Create the low temperature label for current day."""
     return create_label(parent, "low_label", "--")
+
+def create_humidity(parent):
+    """Create the low temperature label for current day."""
+    return create_label(parent, "humid_label", "--")
+
+def create_air_quality(parent):
+    """Create the low temperature label for current day."""
+    return create_label(parent, "air_label", "--")
+
+def create_pollen(parent):
+    """Create the low temperature label for current day."""
+    return create_label(parent, "pollen_label", "--")
