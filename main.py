@@ -8,7 +8,7 @@ from PyQt6.QtCore import QFile, QTextStream
 from PyQt6.QtGui import QFontDatabase
 
 # Local library imports
-from ui.main_window import Main_Window
+from ui.widgets.main_window import Main_Window
 
 def main():
     """main() method runs the main program."""

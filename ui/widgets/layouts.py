@@ -1,13 +1,13 @@
 # Third party imports
-from PyQt6.QtWidgets import QVBoxLayout, QHBoxLayout
+from PyQt6.QtWidgets import QVBoxLayout, QHBoxLayout, QFormLayout
 from PyQt6.QtCore import Qt
 
 def create_main_layout(parent, widgets):
     """
-    Create a layout manager for the Widgets dictionary.
+    Create a vertical layout manager for the main window.
 
-    Widgets order:
-        0 - app title label
+    Widgets dictionary order:
+        0 - app_title label object
     """
 
     # Create a vertical layout manager
@@ -22,3 +22,12 @@ def create_main_layout(parent, widgets):
     parent.setLayout(vbox)
 
     return vbox
+
+def create_settings_layout(parent, widgets):
+    """
+    Create a form layout manager for the settings window.
+
+    Widgets dictionary order:
+        0 - api_key lineedit (textbox) object
+    """
+    pass
