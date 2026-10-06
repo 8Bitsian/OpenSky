@@ -78,7 +78,7 @@ A preview image or animated GIF can be added here:
 ## Technologies
 
 - Python
-- PyQt5
+- PyQt6
 - QSS
 - OpenWeatherMap API
 - Requests
