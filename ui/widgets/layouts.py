@@ -49,6 +49,11 @@ def create_settings_layout(parent, widgets):
     Create a form layout manager for the settings window.
 
     Widgets dictionary order:
-        0 - api_key lineedit (textbox) object
+        0 - dialog_title label object
+        1 - api_textbox lineedit (textbox) object
+        2 - api_submit button object
+        3 - city_textbox lineedit object
+        4 - city_submit button object
+        5 - temp_units button object
     """
     pass

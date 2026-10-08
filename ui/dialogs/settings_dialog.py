@@ -47,10 +47,10 @@ class Settings_Window(QDialog):
         settings_widgets = {
             "dialog_title": self.setting_title,
             "api_textbox": self.api_key_textbox,
-            "api_button": self.api_key_submit,
+            "api_submit": self.api_key_submit,
             "city_textbox": self.city_name_textbox,
-            "city_button": self.city_name_submit,
-            "temp_button": self.temp_unit_choice
+            "city_submit": self.city_name_submit,
+            "temp_units": self.temp_unit_choice
         }
 
         # Apply the layout manager to widget dictionary
