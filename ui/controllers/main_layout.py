@@ -1,5 +1,5 @@
 # Third party imports
-from PyQt6.QtWidgets import QVBoxLayout, QHBoxLayout, QFormLayout
+from PyQt6.QtWidgets import QVBoxLayout, QHBoxLayout, QGridLayout, QFormLayout
 from PyQt6.QtCore import Qt
 
 # Global variables
@@ -46,7 +46,23 @@ def create_forecast_layout(widgets):
 
 def create_fiveday_layout(widgets):
     """Call the add_widgets function to create a horizontal layout manager for the next five-day forecast."""
-    pass
+    # Create a horizontal layout manager for the row of all 5 daily forecast tiles
+    forecast_row = QHBoxLayout()
+    forecast_row.setSpacing(10)
+
+    for index in range(5):
+        # Create a grid layout manager for the individual forecast tiles
+        tile = QGridLayout()
+        tile.setSpacing(5)
+
+        tile.addWidget(widgets["forecast_month"][index], 0, 0, alignment=CENTER)
+        tile.addWidget(widgets["forecast_week"][index], 0, 1, alignment=CENTER)
+        tile.addWidget(widgets["forecast_image"][index], 1, 0, alignment=CENTER)
+        tile.addWidget(widgets["forecast_temp"][index], 1, 1, alignment=CENTER)
+
+        forecast_row.addLayout(tile)
+
+    return forecast_row
 
 def create_detailed_layout(widgets):
     """Call the add_widgets function to create a grid layout manager for the current detailed weather forecast."""

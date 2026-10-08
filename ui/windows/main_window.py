@@ -63,6 +63,7 @@ class Main_Window(QMainWindow):
         self.settings_button = create_settings_button(central_widget, on_dialog_click)
         # Create main weather-state svg object
         self.current_weather_image = create_current_weather_image(central_widget, "drizzle.svg")
+
         # Create main city name label object
         self.city_name_label = create_city_name(central_widget)
         # Create main current temperature label object
@@ -70,24 +71,30 @@ class Main_Window(QMainWindow):
         # Create main weather description label object
         self.main_desc_label = create_description(central_widget)
 
-        # 1 horizonal layout containing these widgets for each of the next five days
         # Create forecast month date label object
-        self.forecast_month_label = create_forecast_month(central_widget)
+        self.forecast_month_labels = [
+            create_forecast_month(central_widget)
+            for index in range(5)
+        ]
+        
         # Create forecast week date label object
-        self.forecast_week_label = create_forecast_week(central_widget)
-        # Create forecast weather-state svg object
-        self.forecast_weather_images = [
-            create_forecast_weather_image(
-                central_widget,
-                "drizzle.svg",
-                index
-            )
+        self.forecast_week_labels = [
+            create_forecast_week(central_widget)
             for index in range(5)
         ]
 
         # Create forecast temperature label object
-        self.forecast_temp_label = create_forecast_temp(central_widget)
-        
+        self.forecast_temp_labels = [
+            create_forecast_temp(central_widget)
+            for index in range(5)
+        ]
+
+        # Create forecast weather-state svg object
+        self.forecast_weather_images = [
+            create_forecast_weather_image(central_widget, "drizzle.svg", index)
+            for index in range(5)
+        ]
+
         # Create feels-like temperature label object
         self.feels_like_temp_label = create_feel_temp(central_widget)
         # Create humidity label object
@@ -107,10 +114,10 @@ class Main_Window(QMainWindow):
             "city_title": self.city_name_label,
             "main_temp": self.main_temp_label,
             "main_desc": self.main_desc_label,
-            "forecast_month": self.forecast_month_label,
-            "forecast_week": self.forecast_week_label,
+            "forecast_month": self.forecast_month_labels,
+            "forecast_week": self.forecast_week_labels,
             "forecast_image": self.forecast_weather_images,
-            "forecast_temp": self.forecast_temp_label,
+            "forecast_temp": self.forecast_temp_labels,
             "feel_like_temp": self.feels_like_temp_label,
             "humid_level": self.humid_level_label,
             "sunrise_time": self.sunrise_label,
