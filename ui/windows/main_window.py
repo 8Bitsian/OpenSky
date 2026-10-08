@@ -104,17 +104,17 @@ class Main_Window(QMainWindow):
             "mode_button": self.mode_button,
             "settings_button": self.settings_button,
             "weather_image": self.current_weather_image,
-            "city_label": self.city_name_label,
+            "city_title": self.city_name_label,
             "main_temp": self.main_temp_label,
-            "maion_desc": self.main_desc_label,
+            "main_desc": self.main_desc_label,
             "forecast_month": self.forecast_month_label,
             "forecast_week": self.forecast_week_label,
             "forecast_images": self.forecast_weather_images,
             "forecast_temp": self.forecast_temp_label,
             "feel_like_temp": self.feels_like_temp_label,
             "humid_level": self.humid_level_label,
-            "sunrise_label": self.sunrise_label,
-            "sunset_label": self.sunset_label,
+            "sunrise_time": self.sunrise_label,
+            "sunset_time": self.sunset_label,
         }
 
         for index, image in enumerate(self.forecast_weather_images):

@@ -7,7 +7,28 @@ def create_main_layout(parent, widgets):
     Create a vertical layout manager for the main window.
 
     Widgets dictionary order:
-        0 - app_title label object
+        Navigation Bar Group
+        0 - main_title label object
+        1 - mode_button button object
+        2 - settings_button button object
+
+        Current Forecast
+        3 - weather_image svg object
+        4 - city_title label object
+        5 - main_temp label object
+        6 - main_desc label object
+
+        Five-Day Forecast
+        7 - forecast_month label object
+        8 - forecast_week label object
+        9 - forecast_images svg objects
+        10 - forecast_temp label object
+
+        Detailed Forecast
+        11 - feel_like_temp label object
+        12 - humid_level label object
+        13 - sunrise_time label object
+        14 - sunset_time label object
     """
 
     # Create a vertical layout manager
