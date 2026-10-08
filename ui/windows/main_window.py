@@ -109,7 +109,7 @@ class Main_Window(QMainWindow):
             "main_desc": self.main_desc_label,
             "forecast_month": self.forecast_month_label,
             "forecast_week": self.forecast_week_label,
-            "forecast_images": self.forecast_weather_images,
+            "forecast_image": self.forecast_weather_images,
             "forecast_temp": self.forecast_temp_label,
             "feel_like_temp": self.feels_like_temp_label,
             "humid_level": self.humid_level_label,

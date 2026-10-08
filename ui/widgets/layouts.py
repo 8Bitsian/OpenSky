@@ -35,10 +35,10 @@ def create_main_layout(parent, widgets):
         5 - main_temp label object
         6 - main_desc label object
 
-        Five-Day Forecast
+        Five-Day Forecast (will make 5 layouts side-by-side)
         7 - forecast_month label object
         8 - forecast_week label object
-        9 - forecast_images svg objects
+        9 - forecast_image svg object
         10 - forecast_temp label object
 
         Detailed Forecast
