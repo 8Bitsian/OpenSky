@@ -6,7 +6,7 @@ from PyQt6.QtCore import Qt
 CENTER = Qt.AlignmentFlag.AlignCenter
 
 def create_nav_bar_layout(widgets):
-    """Call the add_widgets function to create a horizontal layout manager for a navigation bar."""
+    """Create a horizontal layout manager for a navigation bar."""
     # Create a horizontal layout manager for the navigation bar
     nav_bar = QHBoxLayout()
 
@@ -45,7 +45,7 @@ def create_forecast_layout(widgets):
     return current_forecast
 
 def create_fiveday_layout(widgets):
-    """Call the add_widgets function to create a horizontal layout manager for the next five-day forecast."""
+    """Create a horizontal layout manager for the next five-day forecast."""
     # Create a horizontal layout manager for the row of all 5 daily forecast tiles
     forecast_row = QHBoxLayout()
     forecast_row.setSpacing(10)
@@ -66,4 +66,29 @@ def create_fiveday_layout(widgets):
 
 def create_detailed_layout(widgets):
     """Call the add_widgets function to create a grid layout manager for the current detailed weather forecast."""
-    pass
+    # Create a grid layout manager for the detailed forecast information
+    detailed_forecast = QGridLayout()
+    detailed_forecast.setSpacing(10)
+
+    detailed_forecast.addWidget(widgets["feel_like_temp"], 0, 0, alignment=CENTER)
+    detailed_forecast.addWidget(widgets["humid_level"], 0, 1, alignment=CENTER)
+    detailed_forecast.addWidget(widgets["sunrise_time"], 1, 0, alignment=CENTER)
+    detailed_forecast.addWidget(widgets["sunset_time"], 1, 1, alignment=CENTER)
+
+    return detailed_forecast
+
+def create_forecast_layout(widgets):
+    """Call the add_widgets function to create a vertical layout manager for the current weather forecast."""
+    # Create a vertical layout manager for the current forecast information
+    current_forecast = QVBoxLayout()
+    current_forecast.setAlignment(CENTER)
+
+    # Call the add_widgets function to create the label objects
+    add_widgets(current_forecast,
+                widgets,
+                "city_title",   # Create the city name title label object
+                "main_temp",    # Create the main currrent temperature label object
+                "main_desc",    # Create the current weather description label object
+                alignment=CENTER)
+
+    return current_forecast
