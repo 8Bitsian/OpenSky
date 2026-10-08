@@ -8,11 +8,11 @@ from data.weather_data import get_current_conditions
 from services.weather_service import load_weather_data
 from services.weather_worker import weather_worker
 
-def on_mode_switch(self, checked=False):
+def on_mode_switch(self):
     """Toggle the app theme between light mode and dark mode."""
     pass
 
-def open_settings(self, checked=False):
+def open_settings(self):
     """Open the settings dialog window and apply changes if the user accets the dialog."""
     dialog = Settings_Window(
         parent=self,

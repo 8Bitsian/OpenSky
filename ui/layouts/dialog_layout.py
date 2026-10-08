@@ -1,5 +1,5 @@
 # Third party imports
-from PyQt6.QtWidgets import QVBoxLayout, QHBoxLayout, QFormLayout
+from PyQt6.QtWidgets import QVBoxLayout, QHBoxLayout
 from PyQt6.QtCore import Qt
 
 # Global variables
@@ -59,7 +59,7 @@ def create_unit_button_layout(widgets):
     unit_buttons = QHBoxLayout()
     
     # Create settings dialog box title label object
-    unit_buttons.addWidget(widgets["celsius__button"])
+    unit_buttons.addWidget(widgets["celsius_button"])
 
     # Create settings dialog box title label object
     unit_buttons.addWidget(widgets["fahrenheit_button"])

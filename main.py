@@ -18,7 +18,7 @@ def main():
     window = Main_Window()
     window.show()
 
-    sys.exit(app.exec())
+    sys.exit(app.exec()) 
 
 if __name__ == "__main__":
     print(f"Running {__name__}\n")

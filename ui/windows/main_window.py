@@ -3,8 +3,7 @@ import sys, os
 from pathlib import Path
 
 # Third-party limports
-from PyQt6.QtWidgets import QMainWindow, QWidget, QDialog, QPushButton
-from PyQt6.QtCore import Qt
+from PyQt6.QtWidgets import QMainWindow, QWidget, QDialog
 
 # Local library imports
 from ui.controllers.main_controller import (on_mode_switch,
@@ -53,12 +52,19 @@ class Main_Window(QMainWindow):
 
         # Create main window title label object
         self.main_title = create_app_title(central_widget)
+        
         # Create mode button object
-        self.mode_button = create_mode_switch(central_widget, on_mode_switch)
-        self.mode_button.clicked.connect(on_mode_switch)
+        self.mode_button = create_mode_switch(central_widget)
+        self.mode_button.clicked.connect(
+            lambda checked=False: on_mode_switch(self)
+        )
+
         # Create settings button object
-        self.settings_button = create_settings_button(central_widget, open_settings)
-        self.settings_button.clicked.connect(open_settings)
+        self.settings_button = create_settings_button(central_widget)
+        self.settings_button.clicked.connect(
+            lambda checked=False: open_settings(self)
+        )
+
         # Create main weather-state svg object
         self.current_weather_image = create_current_weather_image(central_widget, "drizzle.svg")
 

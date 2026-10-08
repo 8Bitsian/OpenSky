@@ -23,41 +23,36 @@ def create_radio_button(parent, object_name, text=""):
 
     return radio
 
-def create_api_submit(parent, on_submit_click):
+def create_api_submit(parent, on_submit_click=None):
     """Create the city input submit button to enter the city name."""
-    return create_button(parent, "submit_button", on_submit_click, "Submit")
+    return create_button(parent, "api_submit_button", on_submit_click, "Submit")
 
-def create_city_submit(parent, on_submit_click):
+def create_city_submit(parent, on_submit_click=None):
     """Create the city input submit button to enter the city name."""
-    return create_button(parent, "submit_button", on_submit_click, "Submit")
+    return create_button(parent, "city_submit_button", on_submit_click, "Submit")
 
-def create_mode_switch(parent, on_mode_switch):
+def create_mode_switch(parent, on_mode_switch=None):
     """Create the city input submit button to enter the city name."""
     return create_button(parent, "mode_button", on_mode_switch)
 
-def create_settings_button(parent, on_dialog_click):
+def create_settings_button(parent, open_settings=None):
     """Create the city input submit button to enter the city name."""
-    return create_button(parent, "settings_button", on_dialog_click)
+    return create_button(parent, "settings_button", open_settings)
 
-def create_temp_unit_preference(parent, on_unit_change):
-    """
-    Create the temperature-unit radio button.
-
-    The button IDs:
-        0: Metric (Celsius)
-        1: Imperial (Fahrenheit)
-    """
+def create_temp_unit_preference(parent, on_unit_change=None):
+    """ Create the temperature-unit button groups and its radio buttons."""
     # Create button objects
-    celsius = create_radio_button(parent, "c_temp_button", "Celsius")
-    fahrenheit = create_radio_button(parent, "f_temp_button", "Fahrenheit")
+    celsius = create_radio_button(parent, "celsius_button", "Celsius")
+    fahrenheit = create_radio_button(parent, "fahrenheit_button", "Fahrenheit")
 
     # Create button group
     group = QButtonGroup(parent)
-    group.addButton(celsius, 0)
-    group.addButton(fahrenheit, 1)
+    group.addButton(celsius, 0)     # 0 = Metric
+    group.addButton(fahrenheit, 1)  # 1 = Imperial
 
     # Connect the button group to a module when clicked
-    group.idClicked.connect(on_unit_change)
+    if on_unit_change is not None:
+        group.idClicked.connect(on_unit_change)
 
     # Default to Celsius
     celsius.setChecked(True)
