@@ -8,7 +8,7 @@ from PyQt6.QtCore import Qt
 
 # Local library imports
 from ui.controllers.main_controller import (on_mode_switch,
-                                            on_dialog_click,
+                                            open_settings,
                                             display_weather,
                                             update_picture,
                                             set_forecast_icons)
@@ -55,8 +55,10 @@ class Main_Window(QMainWindow):
         self.main_title = create_app_title(central_widget)
         # Create mode button object
         self.mode_button = create_mode_switch(central_widget, on_mode_switch)
+        self.mode_button.clicked.connect(on_mode_switch)
         # Create settings button object
-        self.settings_button = create_settings_button(central_widget, on_dialog_click)
+        self.settings_button = create_settings_button(central_widget, open_settings)
+        self.settings_button.clicked.connect(open_settings)
         # Create main weather-state svg object
         self.current_weather_image = create_current_weather_image(central_widget, "drizzle.svg")
 

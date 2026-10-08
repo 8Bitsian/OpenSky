@@ -28,8 +28,9 @@ def create_nav_bar_layout(widgets):
     nav_bar.addStretch()
 
     # Create settings button object
-    nav_bar.addWidget(widgets["setting_button"])
-
+    set_button = widgets["setting_button"]
+    nav_bar.addWidget(set_button)
+    
     # # Create the background image object
     # widgets["weather_image"].setAlignment(Qt.AlignmentFlag.AlignCenter)
     # nav_bar.addWidget(widgets["weather_image"])

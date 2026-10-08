@@ -12,8 +12,21 @@ def on_mode_switch(self, checked=False):
     """Toggle the app theme between light mode and dark mode."""
     pass
 
-def on_dialog_click(self, checked=False):
-    pass
+def open_settings(self, checked=False):
+    """Open the settings dialog window and apply changes if the user accets the dialog."""
+    dialog = Settings_Window(
+        parent=self,
+        api_key=getattr(self, "api_key", ""),
+        city_name=getattr(self, "city_name", ""),
+        units=getattr(self, "units", "metric"),
+    )
+
+    if dialog.exec() == QDialog.DialogCode.Accepted:
+        self.api_key = dialog.api_key
+        self.city_name = dialog.city_name
+        self.units = dialog.selected_units
+
+    # Call weather-loading method since settings refreshes the main window
 
 def display_weather(self, data):
     main_data = data.get("main", {})
@@ -69,22 +82,6 @@ def set_forecast_icons(self, filenames):
     """Update the five forecast icons from a list of SVG filenames."""
     for image, filename in zip(self.forecast_weather_images, filenames):
         image.load(str(get_icon_path(filename)))
-
-def open_settings(self, checked=False):
-    """Open the settings dialog window and apply changes if the user accets the dialog."""
-    dialog = Settings_Window(
-        parent=main_window,
-        api_key=main_window.api_key,
-        city_name=main_window.city_name,
-        units=main_window.units
-    )
-
-    if dialog.exec() == Settings_Window.DialogCode.Accepted:
-        self.api_key = dialog.api_key
-        self.city_name = dialog.city_name
-        self.units = dialog.selected_units
-
-    # Call weather-loading method since settings refreshes the main window
 
 def load_weather(self, city_name, api_key, units):
     self.weather_thread = QThread(self)
