@@ -3,67 +3,17 @@ import sys, os
 from pathlib import Path
 
 # Local library imports
-# from ui.windows.main_window import Main_Window
-# from ui.dialogs.settings_dialog import Settings_Window
-# from services.weather_service import load_weather_data
+from ui.dialogs.settings_dialog import Settings_Window
+from data.weather_data import get_current_conditions
+from services.weather_service import load_weather_data
+from services.weather_worker import weather_worker
 
-def open_settings(self):
-    """Inside the main window class open a settings dialog window"""
-    dialog = Settings_Window(self)
-
-    if dialog.exec() == QDialog.DialogCode.Accepted:
-        username = dialog.username.text()
-        print(username)
-
-def on_submit_click(self):
-    print("Submit Clicked!")
-
-    api_key = self.api_key.text().strip()
-    if not api_key:
-        self.caption.setText("Please enter your API key.")
-        return
-
-    city_name = self.city_name.text().strip()
-    if not city_name:
-        self.caption.setText("Please enter a city.")
-        return
-
-    print(f"You submitted: {city_name}")
-
-    request_key = city_name.casefold()
-    if request_key == self.last_request:
-        self.caption.setText("Data is already being displayed")
-        return
-
-    self.submit.setEnabled(False)
-    self.caption.setText("Loading weather...")
-
-    try:
-        data = load_weather_data(city_name, api_key, "metric")
-        self.last_weather_data = data
-        self.last_request = request_key
-
-        self.display_weather(data)
-
-    except ValueError as error:
-        self.caption.setText(str(error))
-
-    finally:
-        self.submit.setEnabled(True)
-
-def on_mode_switch(self):
+def on_mode_switch(self, checked=False):
+    """Toggle the app theme between light mode and dark mode."""
     pass
 
-def on_dialog_click(self):
+def on_dialog_click(self, checked=False):
     pass
-
-def on_unit_changed(self, button_id):
-    self.units = "imperial" if button_id == 1 else "metric"
-    if self.last_weather_data is None:
-        self.caption.setText("Submit a city to load the weather.")
-        return
-
-    self.display_weather(self.last_weather_data)
 
 def display_weather(self, data):
     main_data = data.get("main", {})
@@ -119,3 +69,43 @@ def set_forecast_icons(self, filenames):
     """Update the five forecast icons from a list of SVG filenames."""
     for image, filename in zip(self.forecast_weather_images, filenames):
         image.load(str(get_icon_path(filename)))
+
+def open_settings(self, checked=False):
+    """Open the settings dialog window and apply changes if the user accets the dialog."""
+    dialog = Settings_Window(
+        parent=main_window,
+        api_key=main_window.api_key,
+        city_name=main_window.city_name,
+        units=main_window.units
+    )
+
+    if dialog.exec() == Settings_Window.DialogCode.Accepted:
+        self.api_key = dialog.api_key
+        self.city_name = dialog.city_name
+        self.units = dialog.selected_units
+
+    # Call weather-loading method since settings refreshes the main window
+
+def load_weather(self, city_name, api_key, units):
+    self.weather_thread = QThread(self)
+    self.weather_worker = WeatherWorker(city_name, api_key, units)
+    self.weather_worker.moveToThread(self.weather_thread)
+
+    self.weather_thread.started.connect(self.weather_worker.run)
+    self.weather_worker.succeeded.connect(self.show_weather)
+    self.weather_worker.failed.connect(self.show_weather_error)
+
+    self.weather_worker.finished.connect(self.weather_thread.quit)
+    self.weather_worker.finished.connect(self.weather_worker.deleteLater)
+    self.weather_thread.finished.connect(self.weather_thread.deleteLater)
+
+    self.weather_thread.start()
+
+def show_weather(self, data):
+    conditions = get_current_conditions(data)
+    self.main_temp_label.setText(f"{conditions['temperature']:.1f}")
+    self.main_desc_label.setText(conditions["description"])
+    self.city_name_label.setText(conditions["city"])
+
+def show_weather_error(self, message):
+    self.main_desc_label.setText(message)

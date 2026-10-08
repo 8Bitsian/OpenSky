@@ -9,15 +9,18 @@ SESSION = requests.Session()
 _CACHE = {}
 
 def load_weather_data(city_name, api_key, units="metric"):
-    """Get request from openweathermap.org via your API key to get access to real-time weather"""
+    """Get request from openweathermap.org via your API key."""
+
+    api_key = api_key.strip()
+    if not api_key:
+        raise ValueError("Please enter your OpenWeather API key.")
 
     city_name = city_name.strip()
     if not city_name:
         raise ValueError("Please enter a city.")
 
-    api_key = api_key.strip()
-    if not api_key:
-        raise ValueError("Please enter your OpenWeather API key.")
+    if units not in {"emtric", "imperial", "standard"}:
+        raise ValueError("Units must be metric, imperial, or standard.")
 
     cache_key = (city_name.casefold(), units, api_key)
     if cache_key in _CACHE:

@@ -34,7 +34,7 @@ from ui.widgets.labels import (create_app_title,
                                create_sunrise,
                                create_sunset)
 
-from ui.widgets.layouts import create_main_layout
+from ui.layouts.layouts import create_main_layout
 
 # Ex. from ui.window import Main_Window
 class Main_Window(QMainWindow):
