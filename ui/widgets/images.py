@@ -2,8 +2,9 @@
 from pathlib import Path
 
 # Third party imports
+from PyQt6.QtCore import QSize
 from PyQt6.QtGui import QIcon
-from PyQt6.QtCore import QSizePolicy
+from PyQt6.QtWidgets import QSizePolicy
 from PyQt6.QtSvgWidgets import QSvgWidget
 
 # Global variables

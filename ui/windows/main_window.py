@@ -7,12 +7,14 @@ from PyQt6.QtWidgets import QMainWindow, QWidget, QDialog, QPushButton
 from PyQt6.QtCore import Qt
 
 # Local library imports
-from controllers.main_controller import (open_settings,
+from ui.controllers.main_controller import (open_settings,
                                          on_submit_click,
                                          on_mode_switch,
                                          on_dialog_click,
                                          on_unit_changed,
-                                         display_weather)
+                                         display_weather,
+                                         update_picture,
+                                         set_forecast_icons)
 
 from ui.dialogs.settings_dialog import Settings_Window
 
@@ -20,25 +22,21 @@ from ui.widgets.images import (load_icon,
                                create_current_weather_image,
                                create_forecast_weather_image)
 
-from ui.widgets.lineedits import (create_city_input,
-                                  create_api_key_input)
-
 from ui.widgets.buttons import (create_city_submit,
                                 create_mode_switch,
-                                create_settings_button,
-                                create_temp_unit_preference)
+                                create_settings_button)
 
 from ui.widgets.labels import (create_app_title,
                                create_city_name,
                                create_main_temp,
                                create_description,
                                create_feel_temp,
+                               create_humidity,
                                create_forecast_temp,
                                create_forecast_month,
                                create_forecast_week,
-                               create_humidity,
-                               create_air_quality,
-                               create_pollen)
+                               create_sunrise,
+                               create_sunset)
 
 from ui.widgets.layouts import create_main_layout
 
@@ -105,8 +103,8 @@ class Main_Window(QMainWindow):
             "main_title": self.main_title,
             "mode_button": self.mode_button,
             "settings_button": self.settings_button,
-            "weather_image": self.self.current_weather_image,
-            "city_name": self.city_name_label,
+            "weather_image": self.current_weather_image,
+            "city_label": self.city_name_label,
             "main_temp": self.main_temp_label,
             "maion_desc": self.main_desc_label,
             "forecast_month": self.forecast_month_label,

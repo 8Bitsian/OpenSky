@@ -3,9 +3,9 @@ import sys, os
 from pathlib import Path
 
 # Local library imports
-from ui.windows.main_window import Main_Window
-from ui.dialogs.settings_dialog import Settings_Window
-from services.weather_service import load_weather_data
+# from ui.windows.main_window import Main_Window
+# from ui.dialogs.settings_dialog import Settings_Window
+# from services.weather_service import load_weather_data
 
 def open_settings(self):
     """Inside the main window class open a settings dialog window"""

@@ -23,6 +23,10 @@ def create_radio_button(parent, object_name, text=""):
 
     return radio
 
+def create_api_submit(parent, on_submit_click):
+    """Create the city input submit button to enter the city name."""
+    return create_button(parent, "submit_button", on_submit_click, "Submit")
+
 def create_city_submit(parent, on_submit_click):
     """Create the city input submit button to enter the city name."""
     return create_button(parent, "submit_button", on_submit_click, "Submit")
