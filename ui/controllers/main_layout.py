@@ -5,6 +5,15 @@ from PyQt6.QtCore import Qt
 # Global variables
 CENTER = Qt.AlignmentFlag.AlignCenter
 
+def add_widgets(layout, widgets, *names, alignment=None):
+    """Add named widgets to a layout, optionally with a shared alignment."""
+    for name in names:
+        widget = widgets[name]
+        if alignment is None:
+            layout.addWidget(widget)
+        else:
+            layout.addWidget(widget, alignment)
+
 def create_nav_bar_layout(widgets):
     """Create a horizontal layout manager for a navigation bar."""
     # Create a horizontal layout manager for the navigation bar

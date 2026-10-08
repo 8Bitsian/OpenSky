@@ -47,7 +47,7 @@ class Main_Window(QMainWindow):
 
         # Basic window description
         self.setWindowTitle("OpenSky")
-        self.setMinimumSize(400, 600)
+        self.setMinimumSize(400, 800)
         # Image sourced from https://feathericons.com/
         self.setWindowIcon(load_icon("drizzle.svg"))
 

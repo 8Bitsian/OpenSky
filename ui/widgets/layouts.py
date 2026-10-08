@@ -10,15 +10,6 @@ from ui.controllers.main_layout import (create_nav_bar_layout,
 
 # from ui.controllers.set_layout import ()
 
-def add_widgets(layout, widgets, *names, alignment=None):
-    """Add named widgets to a layout, optionally with a shared alignment."""
-    for name in names:
-        widget = widgets[name]
-        if alignment is None:
-            layout.addWidget(widget)
-        else:
-            layout.addWidget(widget, alignment)
-
 def create_main_layout(parent, widgets):
     """
     Create a vertical layout manager for the main window.
@@ -75,10 +66,13 @@ def create_settings_layout(parent, widgets):
 
     Widgets dictionary order:
         0 - dialog_title label object
+
         1 - api_textbox lineedit (textbox) object
         2 - api_submit button object
+
         3 - city_textbox lineedit object
         4 - city_submit button object
+
         5 - temp_units button object
     """
     pass
