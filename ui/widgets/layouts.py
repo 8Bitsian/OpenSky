@@ -11,9 +11,9 @@ def create_main_layout(parent, widgets):
         0 - main_title label object
         1 - mode_button button object
         2 - settings_button button object
+        3 - weather_image svg object (bg for nav bar)
 
         Current Forecast
-        3 - weather_image svg object
         4 - city_title label object
         5 - main_temp label object
         6 - main_desc label object
@@ -31,18 +31,56 @@ def create_main_layout(parent, widgets):
         14 - sunset_time label object
     """
 
-    # Create a vertical layout manager
-    vbox = QVBoxLayout()
-    vbox.setAlignment(Qt.AlignmentFlag.AlignTop)
+    # Create a vertical layout manager for the main layout of the app
+    main_layout = QVBoxLayout()
+    main_layout.setAlignment(Qt.AlignmentFlag.AlignTop)
+
+    # Create a horizontal layout manager for the navigation bar
+    nav_bar = QHBoxLayout()
+    nav_bar.setAlignment(Qt.AlignmentFlag.AlignCenter)
     
+    # Create light/dark mode button object
+    widgets["mode_button"].setAlignment(Qt.Alignment.AlignLeft)
+    nav_bar.addWidget(widgets["mode_button"])
+
     # Create app title label object
-    widgets["app_title"].setAlignment(Qt.AlignmentFlag.AlignCenter)
-    vbox.addWidget(widgets["app_title"])
+    widgets["main_title"].setAlignment(Qt.AlignmentFlag.AlignCenter)
+    nav_bar.addWidget(widgets["main_title"])
+
+    # Create settings button object
+    widgets["settings_button"].setAlignment(Qt.AlignmentFlag.AlignRight)
+    nav_bar.addWidget(widgets["settings_button"])
+
+    # Create the background image object
+    widgets["weather_image"].setAlignment(Qt.AlignmentFlag.AlignCenter)
+    nav_bar.addWidget(widgets["weather_image"])
+
+    # Add the navigation bar to the main layout manager
+    main_layout.addLayout(nav_bar)
+
+    # Create a vertical layout manager for the current forecast information
+    current_forecast = QVBoxLayout()
+    current_forecast.setAlignment(Qt.AlignmentFlag.AlignCenter)
+
+    # Create the city name title label object
+    widgets["city_title"].setAlignment(QtAlignmentFlag.AlignCenter)
+    current_forecast.addWidget(widgets["city_title"])
+
+    # Create the main currrent temperature label object
+    widgets["main_temp"].setAlignment(QtAlignmentFlag.AlignCenter)
+    current_forecast.addWidget(widgets["main_temp"])
+
+    # Create the current weather description label object
+    widgets["main_desc"].setAlignment(QtAlignmentFlag.AlignCenter)
+    current_forecast.addWidget(widgets["main_desc"])
+
+    # Add the current forecast to the main layout manager
+    main_layout.addLayout(current_forecast)
 
     # Set the layout manager to organize widgets
-    parent.setLayout(vbox)
+    parent.setLayout(main_layout)
 
-    return vbox
+    return main_layout
 
 def create_settings_layout(parent, widgets):
     """
