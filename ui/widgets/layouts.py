@@ -8,7 +8,10 @@ from ui.controllers.main_layout import (create_nav_bar_layout,
                                         create_fiveday_layout,
                                         create_detailed_layout)
 
-# from ui.controllers.set_layout import ()
+from ui.controllers.dialog_layout import (create_navbar_layout,
+                                       create_api_key_layout,
+                                       create_city_name_layout,
+                                       create_unit_button_layout)
 
 def create_main_layout(parent, widgets):
     """
@@ -75,4 +78,23 @@ def create_settings_layout(parent, widgets):
 
         5 - temp_units button object
     """
-    pass
+    # Create a vertical layout manager for the main layout of the app
+    setting_layout = QVBoxLayout()
+    setting_layout.setAlignment(Qt.AlignmentFlag.AlignTop)
+
+    # Add the settings title to the settings layout manager
+    setting_layout.addLayout(create_navbar_layout(widgets))
+
+    # Add the current forecast to the settings layout manager
+    setting_layout.addLayout(create_api_key_layout(widgets))
+
+    # Add the next five-day forecast to the settings layout manager
+    setting_layout.addLayout(create_city_name_layout(widgets))
+
+    # Add the current detailed forecast to the settings layout manager
+    setting_layout.addLayout(create_unit_button_layout(widgets))
+
+    # Set the layout manager to organize widgets
+    parent.setLayout(setting_layout)
+
+    return setting_layout

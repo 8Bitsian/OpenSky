@@ -7,14 +7,11 @@ from PyQt6.QtWidgets import QMainWindow, QWidget, QDialog, QPushButton
 from PyQt6.QtCore import Qt
 
 # Local library imports
-from ui.controllers.main_controller import (open_settings,
-                                         on_submit_click,
-                                         on_mode_switch,
-                                         on_dialog_click,
-                                         on_unit_changed,
-                                         display_weather,
-                                         update_picture,
-                                         set_forecast_icons)
+from ui.controllers.main_controller import (on_mode_switch,
+                                            on_dialog_click,
+                                            display_weather,
+                                            update_picture,
+                                            set_forecast_icons)
 
 from ui.dialogs.settings_dialog import Settings_Window
 
@@ -22,8 +19,7 @@ from ui.widgets.images import (load_icon,
                                create_current_weather_image,
                                create_forecast_weather_image)
 
-from ui.widgets.buttons import (create_city_submit,
-                                create_mode_switch,
+from ui.widgets.buttons import (create_mode_switch,
                                 create_settings_button)
 
 from ui.widgets.labels import (create_app_title,
@@ -55,7 +51,7 @@ class Main_Window(QMainWindow):
         central_widget = QWidget(self)
         self.setCentralWidget(central_widget)
 
-        # Create title label object
+        # Create main window title label object
         self.main_title = create_app_title(central_widget)
         # Create mode button object
         self.mode_button = create_mode_switch(central_widget, on_mode_switch)
@@ -105,11 +101,11 @@ class Main_Window(QMainWindow):
         # Create sunset time label object
         self.sunset_label = create_sunset(central_widget)
 
-        # Create dictionary of all widgets
+        # Create dictionary of main widgets
         main_widgets = {
             "main_title": self.main_title,
             "mode_button": self.mode_button,
-            "settings_button": self.settings_button,
+            "setting_button": self.settings_button,
             "weather_image": self.current_weather_image,
             "city_title": self.city_name_label,
             "main_temp": self.main_temp_label,
@@ -127,5 +123,5 @@ class Main_Window(QMainWindow):
         for index, image in enumerate(self.forecast_weather_images):
             main_widgets[f"forecast_weather_image_{index}"] = image
 
-        # Apply the layout manager to widget dictionary
+        # Apply the main layout manager to main widget dictionary
         create_main_layout(central_widget, main_widgets)

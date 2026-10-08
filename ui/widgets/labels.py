@@ -14,6 +14,10 @@ def create_app_title(parent):
     """Create the app title label for the program."""
     return create_label(parent, "app_title", "OpenSky")
 
+def create_dialog_title(parent):
+    """Create the dialog title label for the program."""
+    return create_label(parent, "dialog_title", "Settings")
+
 def create_city_name(parent):
     """Create the city name label for current city selected."""
     return create_label(parent, "city_label", "No city selected.")

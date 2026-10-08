@@ -8,11 +8,11 @@ from ui.controllers.main_controller import (on_submit_click,
 from ui.widgets.lineedits import (create_api_key_input,
                                   create_city_input)
 
-from ui.widgets.layouts import create_settings_layout
-
 from ui.widgets.buttons import (create_api_submit,
                                 create_city_submit,
                                 create_temp_unit_preference)
+
+from ui.widgets.layouts import create_settings_layout
 
 # Ex. from ui.window import Main_Window
 class Settings_Window(QDialog):
