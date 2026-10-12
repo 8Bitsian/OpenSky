@@ -77,8 +77,8 @@ A preview image or animated GIF can be added here:
 
 ## Technologies
 
-- Python
-- PyQt6
+- Python 3.14
+- PyQt6 GUI
 - QSS
 - OpenWeatherMap API
 - Requests
@@ -157,10 +157,9 @@ python main.py
 ```
 
 ## License
-## License
 
 OpenSky is licensed under the GNU General Public License v3.0.
 
 See the [LICENSE](LICENSE) file for the complete license text.
 
-This project uses PyQt5, which is available under the GNU GPL or a commercial license. OpenSky is distributed as an open-source GPL-licensed application.
+This project uses PyQt6, which is available under the GNU GPL or a commercial license. OpenSky is distributed as an open-source GPL-licensed application.
