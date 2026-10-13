@@ -2,6 +2,9 @@
 import sys, os
 from pathlib import Path
 
+# Third-party imports
+from PyQt6.QtWidgets import QDialog
+
 # Local library imports
 from ui.dialogs.settings_dialog import Settings_Window
 from data.weather_data import get_current_conditions
@@ -15,7 +18,7 @@ def on_mode_switch(self):
 def open_settings(self):
     """Open the settings dialog window and apply changes if the user accets the dialog."""
     dialog = Settings_Window(
-        parent=self,
+        parent=self,    # Self should be the main_window instance
         api_key=getattr(self, "api_key", ""),
         city_name=getattr(self, "city_name", ""),
         units=getattr(self, "units", "metric"),
@@ -25,8 +28,7 @@ def open_settings(self):
         self.api_key = dialog.api_key
         self.city_name = dialog.city_name
         self.units = dialog.selected_units
-
-    # Call weather-loading method since settings refreshes the main window
+        self.load_weather_data()
 
 def display_weather(self, data):
     main_data = data.get("main", {})
