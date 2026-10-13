@@ -8,7 +8,7 @@ SESSION = requests.Session()
 # Prevent repeated requests for the same city/unit combo
 _CACHE = {}
 
-def load_weather_data(api_key, city_name, units="metric"):
+def load_weather_data(self, api_key, city_name, units="metric"):
     """Get request from openweathermap.org via your API key."""
 
     api_key = api_key.strip()

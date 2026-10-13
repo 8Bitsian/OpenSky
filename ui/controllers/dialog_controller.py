@@ -18,6 +18,9 @@ def on_api_submit(self):
 
     settings = QSettings("OpenSky", "OpenSky")
     settings.setValue("api_key", api_key)
+    settings.sync()
+
+    self.settingsChanged.emit() # Tell the main window to fetch weather again
 
 def on_city_submit(self):
     """Validate and save the city name without closing the dialog."""
@@ -35,6 +38,9 @@ def on_city_submit(self):
 
     settings = QSettings("OpenSky", "OpenSky")
     settings.setValue("city_name", city_name)
+    settings.sync()
+
+    self.settingsChanged.emit()
 
 # def on_save_settings(self):
 #     """Save the API Key value and the city name value for the main window."""
@@ -56,3 +62,6 @@ def on_unit_change(self, button_id):
 
     settings = QSettings("OpenSky", "OpenSky")
     settings.setValue("units", self.selected_units)
+    settings.sync()
+
+    self.settingsChanged.emit()

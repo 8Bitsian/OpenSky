@@ -1,5 +1,5 @@
 # Third-party imports
-from PyQt6.QtCore import QSettings
+from PyQt6.QtCore import QSettings, pyqtSignal
 from PyQt6.QtWidgets import QDialog, QVBoxLayout, QWidget
 
 # Local library imports
@@ -20,8 +20,10 @@ from ui.widgets.labels import create_dialog_title
 from ui.widgets.lineedits import (create_api_key_input,
                                   create_city_input)
 
-# Ex. from ui.window import Main_Window
 class Settings_Window(QDialog):
+    # Emitted after a key, city, or unit has been saved
+    settingsChanged = pyqtSignal()
+
     def __init__(self, parent=None, api_key="", city_name="", units="metric"):
         super().__init__(parent)
         
@@ -32,7 +34,7 @@ class Settings_Window(QDialog):
         self.setWindowIcon(load_icon("settings.svg"))
 
         # Create a variable to save settings values
-        settings = QSettings("OpenSky", "OpenSky")\
+        settings = QSettings("OpenSky", "OpenSky")
         
         api_key = settings.value("api_key", api_key, type=str)
         city_name = settings.value("city_name", city_name, type=str)

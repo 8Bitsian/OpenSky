@@ -8,7 +8,7 @@ from PyQt6.QtWidgets import QMainWindow, QWidget, QDialog
 # Local library imports
 from ui.controllers.main_controller import (on_mode_switch,
                                             open_settings,
-                                            display_weather,
+                                            reload_weather,
                                             update_picture,
                                             set_forecast_icons)
 
@@ -35,7 +35,6 @@ from ui.widgets.labels import (create_app_title,
 
 from ui.layouts.layouts import create_main_layout
 
-# Ex. from ui.window import Main_Window
 class Main_Window(QMainWindow):
     def __init__(self):
         super().__init__()
@@ -133,3 +132,4 @@ class Main_Window(QMainWindow):
 
         # Apply the main layout manager to main widget dictionary
         create_main_layout(central_widget, main_widgets)
+        reload_weather(self)

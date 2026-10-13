@@ -3,13 +3,11 @@ import sys, os
 from pathlib import Path
 
 # Third-party imports
-from PyQt6.QtCore import QThread
-from PyQt6.QtWidgets import QDialog
+from PyQt6.QtCore import QThread, QSettings
 
 # Local library imports
 from ui.dialogs.settings_dialog import Settings_Window
 from data.weather_data import get_current_conditions
-from services.weather_service import load_weather_data
 from services.weather_worker import WeatherWorker
 
 def on_mode_switch(self):
@@ -25,14 +23,36 @@ def open_settings(self):
         units=getattr(self, "units", "metric"),
     )
 
-    if dialog.exec() == QDialog.DialogCode.Accepted:
-        self.api_key = dialog.api_key
-        self.city_name = dialog.city_name
-        self.units = dialog.selected_units
+    # Each successful submit emits this signal
+    dialog.settingsChanged.connect(
+        lambda: reload_weather(self)
+    )
 
-        load_weather_data(self.api_key, self.city_name, self.units)
+    # Waits until user closes settings dialog
+    dialog.exec() 
+
+def reload_weather(self):
+    """Read saved settings and request updated weather."""
+    settings = QSettings("OpenSky", "openSky")
+
+    api_key = settings.value("api_key", "", type=str).strip()
+    city_name = settings.value("city_name", "", type=str).strip()
+    units = settings.value("units", "metric", type=str)
+
+    if not api_key or not city_name:
+        self.main_desc_label.setText(
+            "Enter an API key and city in Settings."
+        )
+        return
+
+    self.api_key = api_key
+    self.city_name = city_name
+    self.units = units
+
+    load_weather(self, api_key, city_name, units)
 
 def load_weather(self, api_key, city_name, units):
+    """Fetch weather in a worker thread."""
     self.main_desc_label.setText("Loading weather data...")
 
     self.weather_thread = QThread(self)
@@ -40,8 +60,15 @@ def load_weather(self, api_key, city_name, units):
     self.weather_worker.moveToThread(self.weather_thread)
 
     self.weather_thread.started.connect(self.weather_worker.run)
-    self.weather_worker.succeeded.connect(self.show_weather)
-    self.weather_worker.failed.connect(self.show_weather_error)
+
+    # Controller functions, so pass the window explicitly
+    self.weather_worker.succeeded.connect(
+        lambda data: show_weather(self, data)
+    )
+
+    self.weather_worker.failed.connect(
+        lambda message: show_weather_error(self, message)
+    )
 
     self.weather_worker.finished.connect(self.weather_thread.quit)
     self.weather_worker.finished.connect(self.weather_worker.deleteLater)
@@ -50,20 +77,22 @@ def load_weather(self, api_key, city_name, units):
     self.weather_thread.start()
 
 def show_weather(self, data):
+    """Update the main-window labels from the API response."""
     try:
         conditions = get_current_conditions(data)
     except ValueError as error:
-        self.show_weather_error(str(error))
+        show_weather_error(self, str(error))
+        return
     
     unit_symbol = "°F" if self.units == "imperial" else "°C"
     self.main_temp_label.setText(f"{conditions['temperature']:.1f}{unit_symbol}")
-
     self.main_desc_label.setText(conditions["description"])
     self.city_name_label.setText(conditions["city"])
 
     # self.weather_icon_label.setText(conditions["condition"])
 
 def show_weather_error(self, message):
+    """Show a request or response error in the main window."""
     self.main_desc_label.setText(message)
 
 def display_weather(self, data):
@@ -120,4 +149,3 @@ def set_forecast_icons(self, filenames):
     """Update the five forecast icons from a list of SVG filenames."""
     for image, filename in zip(self.forecast_weather_images, filenames):
         image.load(str(get_icon_path(filename)))
-
