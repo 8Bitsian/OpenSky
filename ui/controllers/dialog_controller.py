@@ -1,8 +1,8 @@
 # Third party imports
 from PyQt6.QtWidgets import QMessageBox
 
-def on_submit_click(self):
-    """Validate the settings and accept the dialog if both feilds are filled."""
+def on_api_submit(self):
+    """Validate the settings and accept the dialog if both fields are filled."""
     print("Submit Clicked!")
 
     api_key = self.api_key_textbox.text().strip()
@@ -12,6 +12,11 @@ def on_submit_click(self):
         self.api_key_textbox.setFocus()
         return
 
+    self.api_key = api_key
+    self.accept()
+
+def on_city_submit(self):
+    """Validate and save the city name without closing the dialog."""
     city_name = self.city_name_textbox.text().strip()
 
     if not city_name:
@@ -19,8 +24,7 @@ def on_submit_click(self):
         self.city_name_textbox.setFocus()
         return
 
-    self.api_key = api_key
-    self.city_anme = city_name
+    self.city_name = city_name
     self.accept()
 
 def on_unit_change(self, button_id):

@@ -2,7 +2,8 @@
 from PyQt6.QtWidgets import QDialog, QVBoxLayout, QWidget
 
 # Local library imports
-from ui.controllers.dialog_controller import (on_submit_click,
+from ui.controllers.dialog_controller import (on_api_submit,
+                                              on_city_submit,
                                               on_unit_change)
 
 from ui.layouts.layouts import create_settings_layout
@@ -48,7 +49,7 @@ class Settings_Window(QDialog):
         # Create API key submission button object
         self.api_key_submit = create_api_submit(central_widget)
         self.api_key_submit.clicked.connect(
-            lambda checked=False: on_submit_click(self)
+            lambda checked=False: on_api_submit(self)
         )
 
         # Create city input line textbox object
@@ -58,7 +59,7 @@ class Settings_Window(QDialog):
         # Create city name submission button object
         self.city_name_submit = create_city_submit(central_widget)
         self.city_name_submit.clicked.connect(
-            lambda checked=False: on_submit_click(self)
+            lambda checked=False: on_city_submit(self)
         )
 
         # Create temperature conversation radio buttons
