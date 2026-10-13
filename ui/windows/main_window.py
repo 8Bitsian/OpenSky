@@ -2,7 +2,7 @@
 import sys, os
 from pathlib import Path
 
-# Third-party limports
+# Third-party imports
 from PyQt6.QtWidgets import QMainWindow, QWidget, QDialog
 
 # Local library imports

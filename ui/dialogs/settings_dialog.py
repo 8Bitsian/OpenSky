@@ -1,4 +1,4 @@
-# Third-party limports
+# Third-party imports
 from PyQt6.QtWidgets import QDialog, QVBoxLayout, QWidget
 
 # Local library imports

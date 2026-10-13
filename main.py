@@ -1,7 +1,7 @@
 # Standard library imports
 import sys
 
-# Third-party limports
+# Third-party imports
 from PyQt6.QtWidgets import QApplication
 
 # Local library imports
