@@ -13,7 +13,7 @@ from ui.widgets.buttons import (create_api_submit,
 
 from ui.widgets.images import load_icon
 
-from ui.widgets.labels import create_app_title
+from ui.widgets.labels import create_dialog_title
 
 from ui.widgets.lineedits import (create_api_key_input,
                                   create_city_input)
@@ -39,7 +39,7 @@ class Settings_Window(QDialog):
         dialog_layout.addWidget(central_widget)
 
         # Create title label object
-        self.setting_title = create_app_title(central_widget)
+        self.setting_title = create_dialog_title(central_widget)
 
         # Create OpenWeatherMap API key line edit (textbox) object
         self.api_key_textbox = create_api_key_input(central_widget)

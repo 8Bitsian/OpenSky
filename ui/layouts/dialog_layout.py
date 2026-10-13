@@ -45,10 +45,10 @@ def create_city_name_layout(widgets):
     city_name = QHBoxLayout()
     
     # Create city name line edit (textbox) object
-    city_name.addWidget(widgets["api_textbox"])
+    city_name.addWidget(widgets["city_textbox"])
 
     # Create city name sumbit button object
-    city_name.addWidget(widgets["api_submit"])
+    city_name.addWidget(widgets["city_submit"])
 
     # Add the city name input layout to the settings layout manager
     return city_name
