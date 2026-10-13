@@ -28,6 +28,7 @@ def open_settings(self):
         self.api_key = dialog.api_key
         self.city_name = dialog.city_name
         self.units = dialog.selected_units
+
         load_weather_data(self.api_key, self.city_name, self.units)
 
 def display_weather(self, data):

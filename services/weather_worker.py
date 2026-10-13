@@ -12,7 +12,7 @@ class weather_worker(QObject):
     def __init__(self, city_name, api_key, units="metric"):
         super().__init__()
         self.city_name = city_name
-        self.api_kay = api_key
+        self.api_key = api_key
         self.units = units
 
     @pyqtSlot()

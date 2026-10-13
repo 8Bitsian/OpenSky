@@ -8,18 +8,17 @@ SESSION = requests.Session()
 # Prevent repeated requests for the same city/unit combo
 _CACHE = {}
 
-def load_weather_data(city_name, api_key, units="metric"):
+def load_weather_data(api_key, city_name, units="metric"):
     """Get request from openweathermap.org via your API key."""
 
     api_key = api_key.strip()
+    city_name = city_name.strip()
+
     if not api_key:
         raise ValueError("Please enter your OpenWeather API key.")
-
-    city_name = city_name.strip()
     if not city_name:
         raise ValueError("Please enter a city.")
-
-    if units not in {"emtric", "imperial", "standard"}:
+    if units not in {"metric", "imperial", "standard"}:
         raise ValueError("Units must be metric, imperial, or standard.")
 
     cache_key = (city_name.casefold(), units, api_key)

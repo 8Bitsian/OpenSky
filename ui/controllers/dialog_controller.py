@@ -13,7 +13,6 @@ def on_api_submit(self):
         return
 
     self.api_key = api_key
-    self.accept()
 
 def on_city_submit(self):
     """Validate and save the city name without closing the dialog."""
@@ -25,7 +24,6 @@ def on_city_submit(self):
         return
 
     self.city_name = city_name
-    self.accept()
 
 def on_unit_change(self, button_id):
     """Update the selected temperature unit."""
