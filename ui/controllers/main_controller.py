@@ -8,6 +8,7 @@ from PyQt6.QtCore import QThread, QSettings
 
 # Local library imports
 from ui.dialogs.settings_dialog import Settings_Window
+from ui.widgets.images import get_icon_path
 from data.weather_data import get_current_conditions
 from services.weather_worker import WeatherWorker
 
@@ -33,22 +34,37 @@ def open_settings(self):
     dialog.exec() 
 
 def reload_weather(self):
-    """Read saved settings and request updated weather."""
+    """Read saved settings and request updated current weather."""
     settings = QSettings("OpenSky", "OpenSky")
 
-    api_key = settings.value("api_key", "", type=str).strip()
-    city_name = settings.value("city_name", "", type=str).strip()
+    api_key = (settings.value("api_key", "", type=str) or "").strip()
+    city_name = (settings.value("city_name", "", type=str) or "").strip()
     units = settings.value("units", "metric", type=str)
 
     if not api_key or not city_name:
+        self.api_key = ""
+        self.city_name = ""
+        self.units = units
         self.main_desc_label.setText(
             "Enter an API key and city in Settings."
         )
         return
 
+    if units not in {"metric", "imperial", "standard"}:
+        units = "metric"
+        settings.setValue("units", units)
+
     self.api_key = api_key
     self.city_name = city_name
     self.units = units
+
+    self.city_name_label.setText(city_name)
+    self.main_temp_label.setText("--")
+    self.main_desc_label.setText("Loading weather data...")
+    self.feels_like_temp_label.setText("Feels like: --")
+    self.humid_level_label.setText("Humidity: --")
+    self.sunrise_label.setText("Sunrise --")
+    self.sunset_label.setText("Sunset --")
 
     load_weather(self, api_key, city_name, units)
 
@@ -61,12 +77,9 @@ def load_weather(self, api_key, city_name, units):
     self.weather_worker.moveToThread(self.weather_thread)
 
     self.weather_thread.started.connect(self.weather_worker.run)
-
-    # Controller functions, so pass the window explicitly
     self.weather_worker.succeeded.connect(
         lambda data: show_weather(self, data)
     )
-
     self.weather_worker.failed.connect(
         lambda message: show_weather_error(self, message)
     )
@@ -117,7 +130,7 @@ def show_weather(self, data):
     sunset = conditions["sunset"]
     if sunset is not None:
         self.sunset_label.setText(
-            f"Sunrise {format_local_time(sunset, timezone_offset)}"
+            f"Sunset {format_local_time(sunset, timezone_offset)}"
         )
 
     # self.weather_icon_label.setText(conditions["condition"])
@@ -167,7 +180,7 @@ def display_weather(self, data):
 
 def update_picture(picture, filename, theme="light"):
     """Update the SVG file displayed by the weather image widget."""
-    image_path = get_image_path(filename, theme)
+    image_path = get_icon_path(filename)
 
     if not image_path.exists():
         print(f"Could not find image: {image_path}")

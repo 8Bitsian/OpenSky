@@ -1,6 +1,9 @@
 # Standard library imports
 import requests
 
+# Local library imports
+from data.weather_data import validate_weather_data
+
 # Global Variables
 BASE_URL = "https://api.openweathermap.org/data/2.5/weather"
 # Reuse one HTTP connection instead of creating a new one
@@ -8,9 +11,8 @@ SESSION = requests.Session()
 # Prevent repeated requests for the same city/unit combo
 _CACHE = {}
 
-def load_weather_data(self, api_key, city_name, units="metric"):
+def load_weather_data(api_key, city_name, units="metric"):
     """Get request from openweathermap.org via your API key."""
-
     api_key = api_key.strip()
     city_name = city_name.strip()
 
@@ -34,14 +36,17 @@ def load_weather_data(self, api_key, city_name, units="metric"):
     try:
         response = SESSION.get(BASE_URL, params=params, timeout=10)
         response.raise_for_status()
-        data = response.json()
+        
+        try:
+            data = response.json()
+        except requests.exceptions.JSONDecodeError as error:
+            raise ValueError("The weather service returned invalid JSON.") from error
 
     except requests.HTTPError as error:
-        repsonse = error.response
-        status = response.status_code if response is not None else "unknown"
+        status = error.response.status_code if response is not None else "unknown"
 
         if status == 401:
-            raise ValueError("The API key was rejected.") from error
+            raise ValueError(f"The API key was rejected. OpenWeather rejected the request: {error.response.text}") from error
         if status == 404:
             raise ValueError("City not found. Check spelling and try again.") from error
             
@@ -55,6 +60,8 @@ def load_weather_data(self, api_key, city_name, units="metric"):
 
     except ValueError as error:
         raise ValueError("The weather service returned an invalid response.") from error
+
+    validate_weather_data(data)
 
     _CACHE[cache_key] = data
     return data

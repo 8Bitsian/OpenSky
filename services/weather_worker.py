@@ -19,8 +19,8 @@ class WeatherWorker(QObject):
     def run(self):
         try:
             data = load_weather_data(
-                self.city_name,
                 self.api_key,
+                self.city_name,
                 self.units
             )
             self.succeeded.emit(data)

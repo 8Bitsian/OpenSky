@@ -15,13 +15,13 @@ QMainWindow,
 QWidget {
     background-color: qlineargradient(
         x1: 0, y1: 0,
-        x2: 1, y2: 1,
+        x2: 0, y2: 1,
         stop: 0 {{GHOST_WHITE}},
-        stop: 1 {{BRIGHT_SKY}}
+        stop: 1 #EAF8FC
     );
     color: {{INK_BLACK}};
     font-family: "Nunito Sans";
-    font-weight: 300;
+    font-weight: 400;
 }
 
 /* Labels */
@@ -33,34 +33,40 @@ QLabel {
 
 QLabel#app_title,
 QLabel#dialog_title {
+    color: {{YALE_BLUE}};
     font-family: "Barlow Semi Condensed";
     font-size: 22px;
     font-weight: 600;
 }
 
 QLabel#temp_label {
+    color: {{INK_BLACK}};
     font-family: "Barlow Semi Condensed";
-    font-size: 56px;
+    font-size: 60px;
     font-weight: 600;
 }
 
 QLabel#city_label {
-    font-size: 18px;
+    color: {{INK_BLACK}};
+    font-size: 19px;
     font-weight: 600;
 }
 
 QLabel#desc_label {
+    color: {{YALE_BLUE}};
     font-size: 15px;
     font-weight: 600;
 }
 
 QLabel#feel_label,
 QLabel#humid_label {
+    color: {{YALE_BLUE}};
     font-size: 12px;
     font-weight: 400;
 }
 
 QLabel#forecast_label {
+    color: {{YALE_BLUE}};
     font-size: 13px;
     font-weight: 600;
 }
@@ -69,31 +75,39 @@ QLabel#month_label,
 QLabel#week_label,
 QLabel#sunrise_label,
 QLabel#sunset_label {
+    color: #52717D;
     font-size: 11px;
     font-weight: 400;
 }
 
-/* Push buttons */
+/* Buttons */
 
 QPushButton {
-    background-color: transparent;
+    background-color: {{GHOST_WHITE}};
     color: {{YALE_BLUE}};
     font-family: "Nunito Sans";
     font-size: 14px;
     font-weight: 600;
-    padding: 8px 10px;
-    border: 2px solid {{BRIGHT_SKY}};
-    border-radius: 7px;
+    padding: 8px 12px;
+    border: 1px solid #B9DCE7;
+    border-radius: 10px;
 }
 
 QPushButton:hover {
-    background-color: {{YALE_BLUE}};
-    color: {{GHOST_WHITE}};
+    background-color: #DDF4FA;
+    border-color: {{BRIGHT_SKY}};
 }
 
 QPushButton:pressed {
-    background-color: {{BRICK_EMBER}};
+    background-color: {{YALE_BLUE}};
     color: {{GHOST_WHITE}};
+    border-color: {{YALE_BLUE}};
+}
+
+QPushButton:disabled {
+    background-color: #EEF3F5;
+    color: #91A4AA;
+    border-color: #D9E2E5;
 }
 
 /* Submit buttons */
@@ -101,6 +115,15 @@ QPushButton:pressed {
 QPushButton#api_submit_button,
 QPushButton#city_submit_button {
     min-width: 80px;
+    background-color: {{YALE_BLUE}};
+    color: {{GHOST_WHITE}};
+    border: 1px solid {{YALE_BLUE}};
+}
+
+QPushButton#api_submit_button:hover,
+QPushButton#city_submit_button:hover {
+    background-color: #146C8B;
+    border-color: #146C8B;
 }
 
 /* Mode and settings buttons */
@@ -110,6 +133,7 @@ QPushButton#settings_button {
     min-width: 32px;
     min-height: 32px;
     padding: 4px;
+    border-radius: 16px;
 }
 
 /* Temperature-unit radio buttons */
@@ -121,14 +145,13 @@ QRadioButton#fahrenheit_button {
     font-family: "Nunito Sans";
     font-size: 14px;
     font-weight: 600;
-    padding: 8px 10px;
+    padding: 7px 10px;
     spacing: 8px;
 }
 
 QRadioButton#celsius_button:hover,
 QRadioButton#fahrenheit_button:hover {
-    background-color: {{YALE_BLUE}};
-    color: {{GHOST_WHITE}};
+    background-color: #DDF4FA;
     border-radius: 8px;
 }
 
@@ -140,12 +163,12 @@ QRadioButton::indicator {
 
 QRadioButton::indicator:unchecked {
     background-color: {{GHOST_WHITE}};
-    border: 2px solid {{BRIGHT_SKY}};
+    border: 2px solid #9ACFDE;
 }
 
 QRadioButton::indicator:unchecked:hover {
-    background-color: {{BRIGHT_SKY}};
-    border: 2px solid {{GHOST_WHITE}};
+    background-color: #DDF4FA;
+    border: 2px solid {{BRIGHT_SKY}};
 }
 
 QRadioButton::indicator:checked {
@@ -153,9 +176,9 @@ QRadioButton::indicator:checked {
     border: 2px solid {{BRIGHT_SKY}};
 }
 
-/* Weather images */
+/* Weather icons */
 
 QSvgWidget {
     background-color: transparent;
-    border-radius: 2px;
+    border-radius: 8px;
 }
