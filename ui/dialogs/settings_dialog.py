@@ -3,15 +3,15 @@ from PyQt6.QtCore import QSettings, pyqtSignal
 from PyQt6.QtWidgets import QDialog, QVBoxLayout, QWidget
 
 # Local library imports
-from ui.controllers.dialog_controller import (on_api_submit,
-                                              on_city_submit,
-                                              on_unit_change)
-
 from ui.layouts.layouts import create_settings_layout
 
 from ui.widgets.buttons import (create_api_submit,
                                 create_city_submit,
                                 create_temp_unit_preference)
+
+from ui.controllers.dialog_controller import (on_api_submit,
+                                              on_city_submit,
+                                              on_unit_change)
 
 from ui.widgets.images import load_icon
 
@@ -21,7 +21,7 @@ from ui.widgets.lineedits import (create_api_key_input,
                                   create_city_input)
 
 class Settings_Window(QDialog):
-    # Emitted after a key, city, or unit has been saved
+    """Emitted after a key, city, or unit has been saved."""
     settingsChanged = pyqtSignal()
 
     def __init__(self, parent=None, api_key="", city_name="", units="metric"):
@@ -40,9 +40,7 @@ class Settings_Window(QDialog):
         city_name = settings.value("city_name", city_name, type=str)
         units = settings.value("units", units, type=str)
 
-        self.api_key = api_key
-        self.city_name = city_name
-        self.selected_units = units
+        self.selected_units = units if units in {"metric", "imperial"} else "metric"
 
         # Create a generic widget for the layout manager
         central_widget = QWidget(self)
@@ -99,3 +97,5 @@ class Settings_Window(QDialog):
 
         # Apply the layout manager to widget dictionary
         create_settings_layout(central_widget, settings_widgets)
+
+    

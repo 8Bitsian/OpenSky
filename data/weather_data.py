@@ -24,6 +24,7 @@ def get_current_conditions(data):
 
     main = data["main"]
     condition = data["weather"][0]
+    sys_data = data.get("sys", {})
 
     return {
         "city": data.get("name", "Unknown"),
@@ -33,4 +34,7 @@ def get_current_conditions(data):
         "description": condition.get("description", "Unknown").capitalize(),
         "condition": condition.get("main", ""),
         "icon_code": condition.get("icon", ""),
+        "sunrise": sys_data.get("sunrise"),
+        "sunset": sys_data.get("sunset"),
+        "timezone": data.get("timezone", 0)
     }

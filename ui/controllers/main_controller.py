@@ -1,6 +1,7 @@
 # Standard library imports
 import sys, os
 from pathlib import Path
+from datetime import datetime, timezone, timedelta
 
 # Third-party imports
 from PyQt6.QtCore import QThread, QSettings
@@ -33,7 +34,7 @@ def open_settings(self):
 
 def reload_weather(self):
     """Read saved settings and request updated weather."""
-    settings = QSettings("OpenSky", "openSky")
+    settings = QSettings("OpenSky", "OpenSky")
 
     api_key = settings.value("api_key", "", type=str).strip()
     city_name = settings.value("city_name", "", type=str).strip()
@@ -84,12 +85,47 @@ def show_weather(self, data):
         show_weather_error(self, str(error))
         return
     
-    unit_symbol = "°F" if self.units == "imperial" else "°C"
+    unit_symbol = {
+        "metric": "°C",
+        "imperial": "°F",
+        "standard": "°K"
+    }.get(self.units, "")
+
     self.main_temp_label.setText(f"{conditions['temperature']:.1f}{unit_symbol}")
+
     self.main_desc_label.setText(conditions["description"])
     self.city_name_label.setText(conditions["city"])
 
+    feels_like = conditions["feels_like"]
+    if feels_like is not None:
+        self.feels_like_temp_label.setText(
+            f"Feels like {feels_like:.1f}{unit_symbol}"
+        )
+
+    humidity = conditions["humidity"]
+    if humidity is not None:
+        self.humid_level_label.setText(f"Humidity {humidity}%")
+
+    timezone_offset = conditions["timezone"]
+
+    sunrise = conditions["sunrise"]
+    if sunrise is not None:
+        self.sunrise_label.setText(
+            f"Sunrise {format_local_time(sunrise, timezone_offset)}"
+        )
+
+    sunset = conditions["sunset"]
+    if sunset is not None:
+        self.sunset_label.setText(
+            f"Sunrise {format_local_time(sunset, timezone_offset)}"
+        )
+
     # self.weather_icon_label.setText(conditions["condition"])
+
+def format_local_time(timestamp, timezone_offset):
+    """Format an OpenWeatherMap Unix timestamp in the city's local time."""
+    city_timezone = timezone(timedelta(seconds=timezone_offset))
+    return datetime.fromtimestamp(timestamp, city_timezone).strftime("%I:%M %p")
 
 def show_weather_error(self, message):
     """Show a request or response error in the main window."""

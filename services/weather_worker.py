@@ -26,7 +26,7 @@ class WeatherWorker(QObject):
             self.succeeded.emit(data)
         except ValueError as error:
             self.failed.emit(str(error))
-        except Exception:
+        except Exception as error:
             print(f"Unexpected weather error: {error}")
             self.failed.emit("An unexpected error occurred while loading weather.")
         finally:

@@ -53,7 +53,7 @@ def load_weather_data(self, api_key, city_name, units="metric"):
     except requests.RequestException as error:
         raise ValueError("Unable to connect to the weather service.") from error
 
-    except requests.exceptions.JSONDecodeError as error:
+    except ValueError as error:
         raise ValueError("The weather service returned an invalid response.") from error
 
     _CACHE[cache_key] = data
