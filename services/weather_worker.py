@@ -1,18 +1,18 @@
 # Third library imports
-from PyQt6.QtCore import QObject, QThread, pyqtSignal, pyqtSlot
+from PyQt6.QtCore import QObject, pyqtSignal, pyqtSlot
 
 # Local library imports
 from services.weather_service import load_weather_data
 
-class weather_worker(QObject):
+class WeatherWorker(QObject):
     succeeded = pyqtSignal(dict)
     failed = pyqtSignal(str)
     finished = pyqtSignal()
 
-    def __init__(self, city_name, api_key, units="metric"):
+    def __init__(self, api_key, city_name, units="metric"):
         super().__init__()
-        self.city_name = city_name
         self.api_key = api_key
+        self.city_name = city_name
         self.units = units
 
     @pyqtSlot()
@@ -27,6 +27,7 @@ class weather_worker(QObject):
         except ValueError as error:
             self.failed.emit(str(error))
         except Exception:
+            print(f"Unexpected weather error: {error}")
             self.failed.emit("An unexpected error occurred while loading weather.")
         finally:
             self.finished.emit()

@@ -13,6 +13,7 @@ def on_api_submit(self):
         return
 
     self.api_key = api_key
+    on_save_settings(self)
 
 def on_city_submit(self):
     """Validate and save the city name without closing the dialog."""
@@ -24,6 +25,19 @@ def on_city_submit(self):
         return
 
     self.city_name = city_name
+    on_save_settings(self)
+
+def on_save_settings(self):
+    """Save the API Key value and the city name value for the main window."""
+    api_key = self.api_key_textbox.text().strip()
+    city_name = self.city_name_textbox.text().strip()
+
+    if not api_key or not city_name:
+        return # Keep the dialog open so the user can submit the other field
+    
+    self.api_key = api_key
+    self.city_name = city_name
+    self.accept()
 
 def on_unit_change(self, button_id):
     """Update the selected temperature unit."""
