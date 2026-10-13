@@ -37,11 +37,14 @@ def load_weather_data(api_key, city_name, units="metric"):
         data = response.json()
 
     except requests.HTTPError as error:
-        status = error.response.status_code if error.response else None
+        repsonse = error.response
+        status = response.status_code if response is not None else "unknown"
+
         if status == 401:
             raise ValueError("The API key was rejected.") from error
         if status == 404:
-            raise ValueError("City not found.") from error
+            raise ValueError("City not found. Check spelling and try again.") from error
+            
         raise ValueError(f"Weather service returned HTTP {status}.") from error
 
     except requests.Timeout as error:

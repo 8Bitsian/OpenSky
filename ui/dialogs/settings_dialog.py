@@ -1,4 +1,5 @@
 # Third-party imports
+from PyQt6.QtCore import QSettings
 from PyQt6.QtWidgets import QDialog, QVBoxLayout, QWidget
 
 # Local library imports
@@ -29,6 +30,13 @@ class Settings_Window(QDialog):
         self.setMinimumSize(300, 200)
         # Image sourced from https://feathericons.com/
         self.setWindowIcon(load_icon("settings.svg"))
+
+        # Create a variable to save settings values
+        settings = QSettings("OpenSky", "OpenSky")\
+        
+        api_key = settings.value("api_key", api_key, type=str)
+        city_name = settings.value("city_name", city_name, type=str)
+        units = settings.value("units", units, type=str)
 
         self.api_key = api_key
         self.city_name = city_name
