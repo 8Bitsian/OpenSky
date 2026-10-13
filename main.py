@@ -9,7 +9,7 @@ from ui.app_theme import load_fonts, load_stylesheet
 from ui.windows.main_window import Main_Window
 
 def main():
-    """main() method runs the main program."""
+    """Final Project: A Weather API Application that gets API data to show real-time weather."""
     app = QApplication(sys.argv)
 
     load_fonts()

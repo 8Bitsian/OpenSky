@@ -17,19 +17,24 @@ COLORS = {
 }
 
 def load_fonts():
-    """Load the application fonts."""
+    """Load the application fonts and print thier registered family names."""
     font_dir = BASE_DIR / "resources" / "fonts"
 
     for font_path in font_dir.glob("*.ttf"):
         font_id = QFontDatabase.addApplicationFont(str(font_path))
+
         if font_id == -1:
             print(f"Could not load font: {font_path}")
+            continue
+        
+        families = QFontDatabase.applicationFontFamilies(font_id)
+        print(f"Loaded {font_path.name}: {families}")
 
 # Load the QSS Style sheet
 def load_stylesheet(app, file_path=None):
     """Load the style sheet and replace color keywords."""
     if file_path is None:
-        file_path = BASE_DIR / "resources" / "qss" / "styles.qss"
+        file_path = BASE_DIR / "qss" / "styles.qss"
 
     file = QFile(str(file_path))
     mode = QIODevice.OpenModeFlag.ReadOnly | QIODevice.OpenModeFlag.Text
