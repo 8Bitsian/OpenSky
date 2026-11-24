@@ -28,7 +28,7 @@ from ui.widgets.labels import (create_app_title,
                                create_feel_temp,
                                create_humidity,
                                create_forecast_temp,
-                               create_forecast_month,
+                               create_forecast_day,
                                create_forecast_week,
                                create_sunrise,
                                create_sunset)
@@ -76,7 +76,7 @@ class Main_Window(QMainWindow):
 
         # Create forecast month date label object
         self.forecast_month_labels = [
-            create_forecast_month(central_widget)
+            create_forecast_day(central_widget)
             for index in range(5)
         ]
         
@@ -117,7 +117,7 @@ class Main_Window(QMainWindow):
             "city_title": self.city_name_label,
             "main_temp": self.main_temp_label,
             "main_desc": self.main_desc_label,
-            "forecast_month": self.forecast_month_labels,
+            "forecast_day": self.forecast_month_labels,
             "forecast_week": self.forecast_week_labels,
             "forecast_image": self.forecast_weather_images,
             "forecast_temp": self.forecast_temp_labels,
