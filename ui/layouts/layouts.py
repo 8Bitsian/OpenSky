@@ -4,9 +4,9 @@ from PyQt6.QtCore import Qt
 
 # Local library imports
 from ui.layouts.main_layout import (create_nav_bar_layout,
-                                        create_forecast_layout,
-                                        create_fiveday_layout,
-                                        create_detailed_layout)
+                                    create_forecast_layout,
+                                    create_fiveday_layout,
+                                    create_detailed_layout)
 
 from ui.layouts.dialog_layout import (create_navbar_layout,
                                        create_api_key_layout,

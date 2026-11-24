@@ -65,7 +65,7 @@ def create_fiveday_layout(widgets):
         tile = QGridLayout()
         tile.setSpacing(5)
 
-        tile.addWidget(widgets["forecast_month"][index], 0, 0, alignment=CENTER)
+        tile.addWidget(widgets["forecast_day"][index], 0, 0, alignment=CENTER)
         tile.addWidget(widgets["forecast_week"][index], 0, 1, alignment=CENTER)
         tile.addWidget(widgets["forecast_image"][index], 1, 0, alignment=CENTER)
         tile.addWidget(widgets["forecast_temp"][index], 1, 1, alignment=CENTER)

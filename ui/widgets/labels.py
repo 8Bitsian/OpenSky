@@ -42,13 +42,13 @@ def create_forecast_temp(parent):
     """Create the high temperature label for current day."""
     return create_label(parent, "forecast_label", "--")
 
-def create_forecast_month(parent):
-    """Create a day of the month (1-31) label for the forecast."""
-    return create_label(parent, "month_label", "d")
+def create_forecast_day(parent):
+    """Create a day of the day (1-31) label for the forecast."""
+    return create_label(parent, "day_label", "--")
 
 def create_forecast_week(parent):
     """Create a day of the week (mon-sun) label for the forecast."""
-    return create_label(parent, "week_label", "ddd")
+    return create_label(parent, "week_label", "---")
 
 def create_sunrise(parent):
     """Create the sunrise time label for the forecast."""
