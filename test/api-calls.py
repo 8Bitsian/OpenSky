@@ -32,6 +32,7 @@ class SettingsWindow(QDialog):
     def __init__(self, settings, parent=None):
         super().__init__()
         self.setWindowTitle("API Test - Settings Dialog Window")
+        self.resize(460, 100)
         self.settings = settings
 
         self.api_input = QLineEdit()
@@ -149,24 +150,31 @@ class WeatherWindow(QWidget):
     def __init__(self):
         super().__init__()
         self.setWindowTitle("Desktop Weather - API Test")
-        self.resize(460, 290)
+        self.resize(460, 320)
         self.worker = None
 
         self.settings = QSettings("YourName", "DesktopWeather")
         self.unit_mode = self.settings.value("units", "metric")
 
-        self.settings_button = QPushButton("Settings")
-        self.settings_button.clicked.connect(self.open_settings)
+        self.theme_button = QPushButton("Change Theme")
+        self.theme_button.clicked.connect(self.app_theme)
 
         self.fetch_button = QPushButton("Get Weather")
         self.fetch_button.clicked.connect(self.fetch_weather)
 
+        self.settings_button = QPushButton("Settings")
+        self.settings_button.clicked.connect(self.open_settings)
+
+        button_row = QHBoxLayout()
+        button_row.addWidget(self.theme_button)
+        button_row.addWidget(self.fetch_button)
+        button_row.addWidget(self.settings_button)
+
         self.current_weather_image = images.create_current_weather_image(self, "drizzle.svg")
+        self.current_weather_image.setFixedSize(64, 64)
 
         self.current_label = QLabel("Enter a city and fetch weather.")
         self.current_label.setWordWrap(True)
-
-        self.current_weather_image.setFixedSize(64, 64)
 
         current_row = QHBoxLayout()
         current_row.addWidget(self.current_weather_image)
@@ -176,10 +184,8 @@ class WeatherWindow(QWidget):
         self.forecast_list.setIconSize(QSize(32,32))
 
         layout = QVBoxLayout(self)
-        layout.addWidget(self.settings_button)
-        layout.addWidget(self.fetch_button)
+        layout.addLayout(button_row)
         layout.addLayout(current_row)
-        # layout.addWidget(self.current_label)
         layout.addWidget(QLabel("5 Day Forecast:"))
         layout.addWidget(self.forecast_list)
 
@@ -218,6 +224,9 @@ class WeatherWindow(QWidget):
         self.worker.failed.connect(self.show_error)
         self.worker.finished.connect(lambda: self.fetch_button.setEnabled(True))
         self.worker.start()
+
+    def app_theme(self):
+        pass
 
     def display_temp(self, temp):
         if self.unit_mode == "standard": # API temperature is Kelvin

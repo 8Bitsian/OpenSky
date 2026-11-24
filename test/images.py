@@ -62,15 +62,19 @@ def weather_icon_filename(condition):
 
     if "thunder" in condition:
         return "thunderstorm.svg"
-    if "hail" in condition:
-        return "hail.svg"
     if "drizzle" in condition:
         return "drizzle.svg"
-    if "rain" in condition:
-        return "rain.svg"
-    if any(word in condition for word in ("clouds", "fog", "mist", "haze", "smoke")):
+    if any(word in condition for word in ("rain", "squalls")):
+        return "rainy.svg"
+    if "snow" in condition:
+        return "snowy.svg"
+    if any(word in condition for word in ("mist", "haze", "fog")):
         return "foggy.svg"
-    if any(word in condition for word in ("clear", "sunny")):
-        return "sunny.svg"
+    if any(word in condition for word in ("few clouds", "scattered clouds", "broken clouds")):
+        return "partly-cloudy-day.svg"
+    if "overcast" in condition:
+        return "cloudy.svg"
+    if "clear sky" in condition:
+        return "clear-day.svg"
 
     return "drizzle.svg"
