@@ -14,6 +14,7 @@ from PyQt6.QtWidgets import (
     QMessageBox,
     QPushButton,
     QVBoxLayout,
+    QHBoxLayout,
     QWidget
 )
 
@@ -25,10 +26,11 @@ class WeatherWorker(QThread):
     succeeded = pyqtSignal(dict, dict)
     failed = pyqtSignal(str)
 
-    def __init__(self, city, api_key):
+    def __init__(self, city, api_key, units):
         super().__init__()
         self.city = city
         self.api_key = api_key
+        self.units = units
 
     def run(self):
         try:
@@ -54,7 +56,7 @@ class WeatherWorker(QThread):
                 "lat": lat,
                 "lon": lon,
                 "appid": self.api_key,
-                "units": "metric",
+                "units": self.units,
             }
 
             current_response = requests.get(f"{BASE_URL}/weather", params=params, timeout=10)
@@ -77,7 +79,7 @@ class WeatherWindow(QWidget):
     def __init__(self):
         super().__init__()
         self.setWindowTitle("Desktop Weather - API Test")
-        self.resize(460, 430)
+        self.resize(460, 290)
         self.worker = None
 
         self.api_input = QLineEdit()
@@ -91,6 +93,21 @@ class WeatherWindow(QWidget):
         form.addRow("API Key:", self.api_input)
         form.addRow("City:", self.city_input)
 
+        self.unit_mode = "metric"
+
+        self.cunit_button = QPushButton("Celsius")
+        self.funit_button = QPushButton("Fahrenheit")
+        self.runit_button = QPushButton("Rankine")
+
+        self.cunit_button.clicked.connect(lambda: self.set_units("metric"))
+        self.funit_button.clicked.connect(lambda: self.set_units("imperial"))
+        self.runit_button.clicked.connect(lambda: self.set_units("standard"))
+
+        row = QHBoxLayout()
+        row.addWidget(self.cunit_button)
+        row.addWidget(self.funit_button)
+        row.addWidget(self.runit_button)
+
         self.fetch_button = QPushButton("Get Weather")
         self.fetch_button.clicked.connect(self.fetch_weather)
 
@@ -101,10 +118,15 @@ class WeatherWindow(QWidget):
 
         layout = QVBoxLayout(self)
         layout.addLayout(form)
+        layout.addLayout(row)
         layout.addWidget(self.fetch_button)
         layout.addWidget(self.current_label)
-        layout.addWidget(QLabel("Forecast (3-hour intervals):"))
+        layout.addWidget(QLabel("5 Day Forecast:"))
         layout.addWidget(self.forecast_list)
+
+    def set_units(self, units):
+        self.unit_mode = units
+        self.fetch_weather()
 
     def fetch_weather(self):
         api_key = self.api_input.text().strip()
@@ -127,18 +149,31 @@ class WeatherWindow(QWidget):
         self.fetch_button.setEnabled(False)
         self.current_label.setText("Loading weather...")
 
-        self.worker = WeatherWorker(city_name, api_key)
+        self.worker = WeatherWorker(city_name, api_key, self.unit_mode)
         self.worker.succeeded.connect(self.show_weather)
         self.worker.failed.connect(self.show_error)
         self.worker.finished.connect(lambda: self.fetch_button.setEnabled(True))
         self.worker.start()
 
+    def display_temp(self, temp):
+        if self.unit_mode == "standard": # API temperature is Kelvin
+            return temp * 9 / 5
+        return temp
+    
+    def temperature_unit(self):
+        return {"metric": "°C", "imperial": "°F", "standard": "°R"}[self.unit_mode]
+
     def show_weather(self, current, forecast):
         detailed = current["weather"][0]["description"].capitalize()
+
+        unit = self.temperature_unit()
+        temp = self.display_temp(current['main']['temp'])
+        feels_like = self.display_temp(current["main"]["feels_like"])
+
         self.current_label.setText(
-            f"{current['name']}: {current['main']['temp']:.1f} °C\n"
+            f"{current['name']}: {temp:.1f} {unit}\n"
             f"{detailed} · Feels like "
-            f"{current['main']['feels_like']:.1f} °C\n"
+            f"{current['main']['feels_like']:.1f} {unit}\n"
             f"Humidity: {current['main']['humidity']}%"
         )
 
@@ -164,12 +199,14 @@ class WeatherWindow(QWidget):
             high = max(day["temps"])
             low = min(day["temps"])
             common_w = Counter(day["conditions"]).most_common(1)[0][0]
+            weekday = date.strftime("%a")
             display_date = date.strftime("%b-%d")
 
             self.forecast_list.addItem(
+                f"{weekday}   "
                 f"{display_date}   "
-                f"{high:>7.1f} °C   "
-                f"{low:>7.1f} °C   "
+                f"{high:>7.1f} {unit}   "
+                f"{low:>7.1f} {unit}   "
                 f"{common_w}"
             )
 

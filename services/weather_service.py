@@ -5,8 +5,8 @@ import requests
 from data.weather_data import validate_weather_data
 
 # Global Variables
-CURRENT_URL = "https://api.openweathermap.org/data/2.5/weather" # Current weather data
-FORECAST_URL = "https://api.openweathermap.org/data/2.5/forecast" # Current forecast data
+BASE_URL = "https://api.openweathermap.org/data/2.5" # Add "weather" or "forecast"
+GEOCODE_URL = "http://api.openweathermap.org/geo/1.0/direct"
 
 # Reuse one HTTP connection instead of creating a new one
 SESSION = requests.Session()
