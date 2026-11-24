@@ -7,10 +7,10 @@ from datetime import datetime, timezone, timedelta
 from PyQt6.QtCore import QThread, QSettings
 
 # Local library imports
+from data.weather_data import get_current_conditions, get_forecast_entries
+from services.weather_worker import WeatherWorker
 from ui.dialogs.settings_dialog import Settings_Window
 from ui.widgets.images import get_icon_path
-from data.weather_data import get_current_conditions
-from services.weather_worker import WeatherWorker
 
 def on_mode_switch(self):
     """Toggle the app theme between light mode and dark mode."""
@@ -93,8 +93,9 @@ def load_weather(self, api_key, city_name, units):
 def show_weather(self, data):
     """Update the main-window labels from the API response."""
     try:
-        conditions = get_current_conditions(data)
-    except ValueError as error:
+        conditions = get_current_conditions(data["current"])
+        forecast_entries = get_forecast_entires(data["forecast"])
+    except (KeyError, ValueError) as error:
         show_weather_error(self, str(error))
         return
     
@@ -135,6 +136,8 @@ def show_weather(self, data):
 
     # self.weather_icon_label.setText(conditions["condition"])
 
+    show_forecast(self, forecast_entries, timezone_offset, unit_symbol)
+
 def format_local_time(timestamp, timezone_offset):
     """Format an OpenWeatherMap Unix timestamp in the city's local time."""
     city_timezone = timezone(timedelta(seconds=timezone_offset))
@@ -145,8 +148,8 @@ def show_weather_error(self, message):
     self.main_desc_label.setText(message)
 
 def display_weather(self, data):
-    main_data = data.get("main", {})
-    weather_data = data.get("weather", [{}])[0]
+    main_data = data["current"].get("main", {})
+    weather_data = data["current"].get("weather", [{}])[0]
 
     temperature = main_data.get("temp")
     description = weather_data.get("description", "Unknown").capitalize()
@@ -198,3 +201,43 @@ def set_forecast_icons(self, filenames):
     """Update the five forecast icons from a list of SVG filenames."""
     for image, filename in zip(self.forecast_weather_images, filenames):
         image.load(str(get_icon_path(filename)))
+
+def show_forecast(self, entries, timezone_offset, unit_symbol):
+    """Show one forecast entry per local date, preferring entries near noon."""
+    city_timezone = timezone(timedelta(seconds=timezone_offset))
+    daily = {}
+
+    for entry in entries:
+        timestamp = entry.get("dt")
+        main = entry.get("main", {})
+        weather_items = entry.get("weather", [])
+
+        if timestamp is None or main.get("temp") is None or not weather_items:
+            continue
+
+        local_time = datetime.fromtimestamp(timestamp, city_timezone)
+        day = local_time.date()
+
+        distance_from_noon = abs( local_time.hour * 60 + local_time.minute - 12 * 60 )
+        if day not in daily or distance_from_noon < daily[day][0]:
+            daily[day] = (distance_from_noon, entry, local_time)
+
+    icon_names = {
+        "01": "sun.svg",
+        "02": "cloud.svg",
+        "03": "cloud.svg",
+        "04": "cloud.svg",
+        "09": "cloud-rain.svg",
+        "10": "cloud-rain.svg",
+        "11": "cloud-lightning.svg",
+        "13": "cloud-snow.svg",
+        "50": "cloud-drizzle.svg",
+    }
+
+    forecast_days = sorted(daily.items())[:5]
+    widgets = self.widgets
+
+    for index, (_, (_, entry, local_time)) in enumerate(forecast_days):
+        widgets["forecast_day"][index].setText(local_time.strftime("%b %d"))
+        widgets["forecast_week"][index].setText(local_time.strftime("%a"))
+        widgets["forecast_temp"][index].setText( f"{entry['main']['temp']:.1f}{unit_symbol}" )

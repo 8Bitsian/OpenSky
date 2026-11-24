@@ -5,37 +5,18 @@ import requests
 from data.weather_data import validate_weather_data
 
 # Global Variables
-# Current weather data (https://openweathermap.org/api/current?collection=current_forecast)
-BASE_URL = "https://api.openweathermap.org/data/2.5/weather"
+CURRENT_URL = "https://api.openweathermap.org/data/2.5/weather" # Current weather data
+FORECAST_URL = "https://api.openweathermap.org/data/2.5/forecast" # Current forecast data
+
 # Reuse one HTTP connection instead of creating a new one
 SESSION = requests.Session()
 # Prevent repeated requests for the same city/unit combo
 _CACHE = {}
 
-def load_weather_data(api_key, city_name, units="metric"):
-    """Get request from openweathermap.org via your API key."""
-    api_key = api_key.strip()
-    city_name = city_name.strip()
-
-    if not api_key:
-        raise ValueError("Please enter your OpenWeather API key.")
-    if not city_name:
-        raise ValueError("Please enter a city.")
-    if units not in {"metric", "imperial", "standard"}:
-        raise ValueError("Units must be metric, imperial, or standard.")
-
-    cache_key = (city_name.casefold(), units, api_key)
-    if cache_key in _CACHE:
-        return _CACHE[cache_key]
-
-    params = {
-        "q": city_name,
-        "appid": api_key,
-        "units": units
-    }
-
+def _get_json(url, params):
+    """Request and decode an OpenWeatherMap JSON response."""
     try:
-        response = SESSION.get(BASE_URL, params=params, timeout=10)
+        response = SESSION.get(url, params=params, timeout=10)
         response.raise_for_status()
         
         try:
@@ -62,7 +43,37 @@ def load_weather_data(api_key, city_name, units="metric"):
     except ValueError as error:
         raise ValueError("The weather service returned an invalid response.") from error
 
-    validate_weather_data(data)
+def load_weather_data(api_key, city_name, units="metric"):
+    """Get request from openweathermap.org via your API key."""
+    api_key = api_key.strip()
+    city_name = city_name.strip()
+
+    if not api_key:
+        raise ValueError("Please enter your OpenWeather API key.")
+    if not city_name:
+        raise ValueError("Please enter a city.")
+    if units not in {"metric", "imperial", "standard"}:
+        raise ValueError("Units must be metric, imperial, or standard.")
+
+    cache_key = (city_name.casefold(), units, api_key)
+    if cache_key in _CACHE:
+        return _CACHE[cache_key]
+
+    params = {
+        "q": city_name,
+        "appid": api_key,
+        "units": units
+    }
+
+    current = _get_json(CURRENT_URL, params)
+    forecast = _get_json(FORECAST_URL, params)
+
+    validate_weather_data(current, forecast)
+
+    data = {
+        "current": current,
+        "forecast": forecast,
+    }
 
     _CACHE[cache_key] = data
     return data

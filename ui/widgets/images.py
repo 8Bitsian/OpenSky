@@ -8,8 +8,9 @@ from PyQt6.QtWidgets import QSizePolicy
 from PyQt6.QtSvgWidgets import QSvgWidget
 
 # Global variables
-PROJECT_DIR = Path(__file__).resolve().parent.parent
-ICON_DIR = PROJECT_DIR / "resources" / "icons"
+PROJECT_DIR = Path(__file__).resolve().parents[2]
+ICON_DIR = PROJECT_DIR / "resources" / "icons" / "weather"
+
 
 def get_icon_path(filename):
     """Return the path to an icon."""
@@ -28,8 +29,14 @@ def load_icon(filename):
 def create_svg_widget(parent, filename, object_name, width, height):
     """Create an SVG Widget w/specified parameters."""
     svg_path = get_icon_path(filename)
+    print("SVG path:", svg_path)
+    print("Exists: ", svg_path.is_file())
 
-    svg = QSvgWidget(str(svg_path), parent)
+    if not svg_path.is_file():
+        raise FileNotFoundError(f"SVG not found at: {svg_path}")
+
+    svg = QSvgWidget(parent)
+    svg.load(str(svg_path))
     svg.setObjectName(object_name)
     svg.setFixedSize(QSize(width, height))
     svg.setSizePolicy(
