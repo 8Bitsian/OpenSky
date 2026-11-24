@@ -29,9 +29,7 @@ def load_icon(filename):
 def create_svg_widget(parent, filename, object_name, width, height):
     """Create an SVG Widget w/specified parameters."""
     svg_path = get_icon_path(filename)
-    print("SVG path:", svg_path)
-    print("Exists: ", svg_path.is_file())
-
+    
     if not svg_path.is_file():
         raise FileNotFoundError(f"SVG not found at: {svg_path}")
 
@@ -46,6 +44,8 @@ def create_svg_widget(parent, filename, object_name, width, height):
 
     if not svg.renderer().isValid():
         print(f"Could not load SVG: {svg_path}")
+    else:
+        print("SVG path:", svg_path)
 
     return svg
 
@@ -55,4 +55,4 @@ def create_current_weather_image(parent, filename):
 
 def create_forecast_weather_image(parent, filename, day_index):
     """Create a small image for forecast day conditions"""
-    return create_svg_widget(parent, filename, "forecast_weather_image", 48, 48)
+    return create_svg_widget(parent, filename, "forecast_weather_image", 32, 32)
