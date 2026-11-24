@@ -11,7 +11,6 @@ from PyQt6.QtSvgWidgets import QSvgWidget
 PROJECT_DIR = Path(__file__).resolve().parents[2]
 ICON_DIR = PROJECT_DIR / "resources" / "icons" / "weather"
 
-
 def get_icon_path(filename):
     """Return the path to an icon."""
     return ICON_DIR / filename
@@ -56,3 +55,22 @@ def create_current_weather_image(parent, filename):
 def create_forecast_weather_image(parent, filename, day_index):
     """Create a small image for forecast day conditions"""
     return create_svg_widget(parent, filename, "forecast_weather_image", 32, 32)
+
+def weather_icon_filename(condition):
+    """Determine which svg image to load depending on the weather condition."""
+    condition = condition.lower()
+
+    if "thunder" in condition:
+        return "thunderstorm.svg"
+    if "hail" in condition:
+        return "hail.svg"
+    if "drizzle" in condition:
+        return "drizzle.svg"
+    if "rain" in condition:
+        return "rain.svg"
+    if any(word in condition for word in ("fog", "mist", "haze", "smoke")):
+        return "fog.svg"
+    if any(word in condition for word in ("clear", "sunny")):
+        return "sunny.svg"
+
+    return "drizzle.svg"

@@ -3,24 +3,94 @@ import sys, os, requests
 from collections import Counter, defaultdict
 from datetime import datetime, timedelta, timezone
 
+# Local-library imports
+import images
+
 # Third-party imports
-from PyQt6.QtCore import QThread, pyqtSignal
+from PyQt6.QtCore import QThread, pyqtSignal, QSize, QSettings
 from PyQt6.QtWidgets import ( 
     QApplication,
     QFormLayout,
     QLabel,
     QLineEdit,
     QListWidget,
+    QListWidgetItem,
     QMessageBox,
     QPushButton,
     QVBoxLayout,
     QHBoxLayout,
-    QWidget
+    QWidget,
+    QDialog,
+    QDialogButtonBox
 )
 
 # Global Constants
 BASE_URL = "https://api.openweathermap.org/data/2.5" # Add "weather" or "forecast"
 GEOCODE_URL = "http://api.openweathermap.org/geo/1.0/direct"
+
+class SettingsWindow(QDialog):
+    def __init__(self, settings, parent=None):
+        super().__init__()
+        self.setWindowTitle("API Test - Settings Dialog Window")
+        self.settings = settings
+
+        self.api_input = QLineEdit()
+        self.api_input.setPlaceholderText("Enter your OpenWeatherMap API key")
+        self.api_input.setEchoMode(QLineEdit.EchoMode.Password)
+        self.api_input.setText(settings.value("api_key", ""))
+
+        self.city_input = QLineEdit()
+        self.city_input.setPlaceholderText("Enter a city (e.g. London, GB)")
+        self.city_input.setText(settings.value("city", ""))
+
+        form = QFormLayout()
+        form.addRow("API Key:", self.api_input)
+        form.addRow("City:", self.city_input)
+
+        self.unit_mode = settings.value("units", "metric")
+
+        self.cunit_button = QPushButton("Celsius")
+        self.funit_button = QPushButton("Fahrenheit")
+        self.runit_button = QPushButton("Rankine")
+
+        self.unit_buttons = {
+            "metric": self.cunit_button,
+            "imperial": self.funit_button,
+            "standard": self.runit_button,
+        }
+
+        for units, button in self.unit_buttons.items():
+            button.setCheckable(True)
+            button.clicked.connect(lambda checked, units=units: self.set_units(units))
+
+        self.unit_buttons[self.unit_mode].setChecked(True)
+
+        row = QHBoxLayout()
+        row.addWidget(self.cunit_button)
+        row.addWidget(self.funit_button)
+        row.addWidget(self.runit_button)
+
+        buttons = QDialogButtonBox(
+            QDialogButtonBox.StandardButton.Save
+            | QDialogButtonBox.StandardButton.Cancel
+        )
+        buttons.accepted.connect(self.save_settings)
+        buttons.rejected.connect(self.reject)
+
+        layout = QVBoxLayout(self)
+        layout.addLayout(form)
+        layout.addLayout(row)
+        layout.addWidget(buttons)
+
+    def set_units(self, units):
+        self.unit_mode = units
+        self.unit_buttons[units].setChecked(True)
+    
+    def save_settings(self):
+        self.settings.setValue("api_key", self.api_input.text().strip())
+        self.settings.setValue("city", self.city_input.text().strip())
+        self.settings.setValue("units", self.unit_mode)
+        self.accept()
 
 class WeatherWorker(QThread):
     succeeded = pyqtSignal(dict, dict)
@@ -82,55 +152,49 @@ class WeatherWindow(QWidget):
         self.resize(460, 290)
         self.worker = None
 
-        self.api_input = QLineEdit()
-        self.api_input.setPlaceholderText("Enter your OpenWeatherMap API key")
-        self.api_input.setEchoMode(QLineEdit.EchoMode.Password)
+        self.settings = QSettings("YourName", "DesktopWeather")
+        self.unit_mode = self.settings.value("units", "metric")
 
-        self.city_input = QLineEdit()
-        self.city_input.setPlaceholderText("Enter a city (e.g. London, GB)")
-
-        form = QFormLayout()
-        form.addRow("API Key:", self.api_input)
-        form.addRow("City:", self.city_input)
-
-        self.unit_mode = "metric"
-
-        self.cunit_button = QPushButton("Celsius")
-        self.funit_button = QPushButton("Fahrenheit")
-        self.runit_button = QPushButton("Rankine")
-
-        self.cunit_button.clicked.connect(lambda: self.set_units("metric"))
-        self.funit_button.clicked.connect(lambda: self.set_units("imperial"))
-        self.runit_button.clicked.connect(lambda: self.set_units("standard"))
-
-        row = QHBoxLayout()
-        row.addWidget(self.cunit_button)
-        row.addWidget(self.funit_button)
-        row.addWidget(self.runit_button)
+        self.settings_button = QPushButton("Settings")
+        self.settings_button.clicked.connect(self.open_settings)
 
         self.fetch_button = QPushButton("Get Weather")
         self.fetch_button.clicked.connect(self.fetch_weather)
 
+        self.current_weather_image = images.create_current_weather_image(self, "drizzle.svg")
+
         self.current_label = QLabel("Enter a city and fetch weather.")
         self.current_label.setWordWrap(True)
 
+        self.current_weather_image.setFixedSize(64, 64)
+
+        current_row = QHBoxLayout()
+        current_row.addWidget(self.current_weather_image)
+        current_row.addWidget(self.current_label, 1)
+
         self.forecast_list = QListWidget()
+        self.forecast_list.setIconSize(QSize(32,32))
 
         layout = QVBoxLayout(self)
-        layout.addLayout(form)
-        layout.addLayout(row)
+        layout.addWidget(self.settings_button)
         layout.addWidget(self.fetch_button)
-        layout.addWidget(self.current_label)
+        layout.addLayout(current_row)
+        # layout.addWidget(self.current_label)
         layout.addWidget(QLabel("5 Day Forecast:"))
         layout.addWidget(self.forecast_list)
+
+    def open_settings(self):
+        dialog = SettingsWindow(self.settings, self)
+        if dialog.exec():
+            self.unit_mode = self.settings.value("units", "metric")
 
     def set_units(self, units):
         self.unit_mode = units
         self.fetch_weather()
 
     def fetch_weather(self):
-        api_key = self.api_input.text().strip()
-        city_name = self.city_input.text().strip()
+        api_key = self.settings.value("api_key", "").strip()
+        city_name = self.settings.value("city", "").strip()
 
         if not api_key:
             QMessageBox.warning(
@@ -164,17 +228,22 @@ class WeatherWindow(QWidget):
         return {"metric": "°C", "imperial": "°F", "standard": "°R"}[self.unit_mode]
 
     def show_weather(self, current, forecast):
-        detailed = current["weather"][0]["description"].capitalize()
+        condition = current["weather"][0]["description"]
+        detailed = condition.capitalize()
 
-        unit = self.temperature_unit()
+        filename = images.weather_icon_filename(condition)
+        self.current_weather_image.load(
+            str(images.get_icon_path(filename))        
+        )
+
+        unit = self.temperature_unit()    
         temp = self.display_temp(current['main']['temp'])
         feels_like = self.display_temp(current["main"]["feels_like"])
-
+        
         self.current_label.setText(
             f"{current['name']}: {temp:.1f} {unit}\n"
-            f"{detailed} · Feels like "
-            f"{current['main']['feels_like']:.1f} {unit}\n"
-            f"Humidity: {current['main']['humidity']}%"
+            f"{detailed}\n"
+            f"Feels like {feels_like:.1f} {unit}\n"
         )
 
         # Forecast timestamps are UTC - shift to city's local time zone prior to grouping by date
@@ -198,17 +267,21 @@ class WeatherWindow(QWidget):
             day = days[date]
             high = max(day["temps"])
             low = min(day["temps"])
-            common_w = Counter(day["conditions"]).most_common(1)[0][0]
+            forecast_w = Counter(day["conditions"]).most_common(1)[0][0]
             weekday = date.strftime("%a")
             display_date = date.strftime("%b-%d")
 
-            self.forecast_list.addItem(
-                f"{weekday}   "
-                f"{display_date}   "
+            filename = images.weather_icon_filename(forecast_w)
+            icon = images.load_icon(filename)
+
+            row_text = (
+                f"{weekday} {display_date}   "
                 f"{high:>7.1f} {unit}   "
                 f"{low:>7.1f} {unit}   "
-                f"{common_w}"
+                f"{forecast_w}"
             )
+
+            self.forecast_list.addItem(QListWidgetItem(icon, row_text))
 
     def show_error(self, message):
         self.current_label.setText("Could not load weather.")
