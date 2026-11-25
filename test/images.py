@@ -56,7 +56,7 @@ def create_forecast_weather_image(parent, filename, day_index):
     """Create a small image for forecast day conditions"""
     return create_svg_widget(parent, filename, "forecast_weather_image", 32, 32)
 
-def weather_icon_filename(condition):
+def weather_icon_filename(condition, is_day=True):
     """Determine which svg image to load depending on the weather condition."""
     condition = condition.lower()
 
@@ -71,10 +71,10 @@ def weather_icon_filename(condition):
     if any(word in condition for word in ("mist", "haze", "fog")):
         return "foggy.svg"
     if any(word in condition for word in ("few clouds", "scattered clouds", "broken clouds")):
-        return "partly-cloudy-day.svg"
+        return "partly-cloudy-day.svg" if is_day else "partly-cloudy-night.svg"
     if "overcast" in condition:
         return "cloudy.svg"
     if "clear sky" in condition:
-        return "clear-day.svg"
+        return "clear-day.svg" if is_day else "clear-night.svg"
 
     return "drizzle.svg"

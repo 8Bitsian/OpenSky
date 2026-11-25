@@ -258,7 +258,10 @@ class WeatherWindow(QWidget):
         condition = current["weather"][0]["description"]
         detailed = condition.capitalize()
 
-        filename = images.weather_icon_filename(condition)
+        now = datetime.now(timezone.utc).timestamp()
+        is_day = current["sys"]["sunrise"] <= now < current["sys"]["sunset"]
+
+        filename = images.weather_icon_filename(condition, is_day)
         self.current_weather_image.load(
             str(images.get_icon_path(filename))        
         )
@@ -275,7 +278,7 @@ class WeatherWindow(QWidget):
 
         # Forecast timestamps are UTC - shift to city's local time zone prior to grouping by date
         city_offset = timedelta(seconds=forecast["city"]["timezone"])
-        days = defaultdict(lambda: {"temps": [], "conditions": []})
+        days = defaultdict(lambda: {"temps": [], "icons": []})
 
         for item in forecast["list"]:
             utc_time = datetime.strptime(
@@ -283,10 +286,11 @@ class WeatherWindow(QWidget):
             ).replace(tzinfo=timezone.utc)
 
             local_date = (utc_time + city_offset).date()
+            condition = item["weather"][0]["description"].capitalize()
+            is_day = item["sys"]["pod"] == "d"
 
             days[local_date]["temps"].append(item["main"]["temp"])
-            condition = item["weather"][0]["description"].capitalize()
-            days[local_date]["conditions"].append(condition)
+            days[local_date]["icons"].append((condition, is_day))
 
         self.forecast_list.clear()
 
@@ -294,18 +298,18 @@ class WeatherWindow(QWidget):
             day = days[date]
             high = max(day["temps"])
             low = min(day["temps"])
-            forecast_w = Counter(day["conditions"]).most_common(1)[0][0]
-            weekday = date.strftime("%a")
-            display_date = date.strftime("%b-%d")
 
-            filename = images.weather_icon_filename(forecast_w)
+            forecast_condition, forecast_is_day = Counter(day["icons"]).most_common(1)[0][0]
+            display_condition = forecast_condition.capitalize()
+
+            filename = images.weather_icon_filename(forecast_condition, forecast_is_day)
             icon = images.load_icon(filename)
 
             row_text = (
-                f"{weekday} {display_date}   "
+                f"{date.strftime('%a %b-%d')}   "
                 f"{high:>7.1f} {unit}   "
                 f"{low:>7.1f} {unit}   "
-                f"{forecast_w}"
+                f"{display_condition}"
             )
 
             self.forecast_list.addItem(QListWidgetItem(icon, row_text))
