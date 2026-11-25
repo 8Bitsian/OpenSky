@@ -2,6 +2,7 @@
 import sys, os, requests
 from collections import Counter, defaultdict
 from datetime import datetime, timedelta, timezone
+from pathlib import Path
 
 # Local-library imports
 import images
@@ -156,6 +157,9 @@ class WeatherWindow(QWidget):
         self.settings = QSettings("YourName", "DesktopWeather")
         self.unit_mode = self.settings.value("units", "metric")
 
+        self.theme_mode = self.settings.value("theme", "light")
+        self.apply_theme(self.theme_mode)
+
         self.theme_button = QPushButton("Change Theme")
         self.theme_button.clicked.connect(self.app_theme)
 
@@ -188,6 +192,23 @@ class WeatherWindow(QWidget):
         layout.addLayout(current_row)
         layout.addWidget(QLabel("5 Day Forecast:"))
         layout.addWidget(self.forecast_list)
+
+    def apply_theme(self, theme_name):
+        theme_path = Path(__file__).parent / "themes" / f"{theme_name}.qss"
+
+        try:
+            stylesheet = theme_path.read_text(encoding="utf-8")
+        except OSError as error:
+            QMessageBox.warning(self, "Theme Error", f"Could not load theme:\n{error}")
+            return
+
+        QApplication.instance().setStyleSheet(stylesheet)
+        self.theme_mode = theme_name
+        self.settings.setValue("theme", theme_name)
+
+    def app_theme(self):
+        next_theme = "dark" if self.theme_mode == "light" else "light"
+        self.apply_theme(next_theme)
 
     def open_settings(self):
         dialog = SettingsWindow(self.settings, self)
@@ -224,9 +245,6 @@ class WeatherWindow(QWidget):
         self.worker.failed.connect(self.show_error)
         self.worker.finished.connect(lambda: self.fetch_button.setEnabled(True))
         self.worker.start()
-
-    def app_theme(self):
-        pass
 
     def display_temp(self, temp):
         if self.unit_mode == "standard": # API temperature is Kelvin
